@@ -152,6 +152,7 @@ public class FileManager extends BasicFrame {
 
 		add(mainPanel);
 		setFrameIcon(UIManager.getIcon("FileView.directoryIcon"));
+		setMaximizable(true);
 		setTitle("File Browser");
 		setSize(700, 500);
 		finish();

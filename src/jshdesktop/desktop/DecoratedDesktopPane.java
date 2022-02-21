@@ -85,11 +85,44 @@ public class DecoratedDesktopPane extends JDesktopPane {
 					}
 				}
 			});
+
 			JPopupMenu menuItemPopup = new JPopupMenu();
+
 			JMenuItem closeFrame = new JMenuItem("Close");
+			closeFrame.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					tmp.dispose();
+				}
+			});
+
 			JMenuItem minimizeFrame = new JMenuItem("Minimize");
+			minimizeFrame.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						tmp.setIcon(true);
+					} catch (Exception e1) {
+
+					}
+				}
+			});
+
 			JMenuItem bringToFront = new JMenuItem("Focus");
+			bringToFront.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					tmp.toFront();
+				}
+			});
+
 			JMenuItem maximizeFrame = new JMenuItem("Maximize");
+			maximizeFrame.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						tmp.setMaximum(true);
+					} catch (Exception e1) {
+
+					}
+				}
+			});
 
 			menuItemPopup.add(closeFrame);
 			menuItemPopup.add(minimizeFrame);
