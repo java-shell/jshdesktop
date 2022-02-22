@@ -38,8 +38,10 @@ import javax.swing.UIManager;
 
 import jshdesktop.Clipboard;
 import jshdesktop.com.pump.plaf.BreadCrumbUI;
+import jshdesktop.com.pump.plaf.PulsingCirclesThrobberUI;
 import jshdesktop.com.pump.swing.JBreadCrumb;
 import jshdesktop.com.pump.swing.JBreadCrumb.BreadCrumbFormatter;
+import jshdesktop.com.pump.swing.JThrobber;
 import jshdesktop.desktop.frame.BasicFrame;
 import jshdesktop.desktop.frame.utilities.ImageViewer;
 import jshdesktop.desktop.frame.utilities.TextEditor;
@@ -59,6 +61,7 @@ public class FileManager extends BasicFrame {
 	private boolean showThumbs = false;
 	private ThumbnailFileView fileView;
 	private Logger log;
+	private BasicFrame thisFrame;
 
 	@Override
 	public void create() {
@@ -156,6 +159,7 @@ public class FileManager extends BasicFrame {
 		setTitle("File Browser");
 		setSize(700, 500);
 		finish();
+		thisFrame = this;
 	}
 
 	private class RoundedShadowIcon implements Icon {
@@ -412,6 +416,20 @@ public class FileManager extends BasicFrame {
 			paste.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
+						JPanel panel = new JPanel();
+						panel.setBackground(new Color(122, 122, 122, 170));
+
+						JThrobber throbber = new JThrobber();
+						throbber.setUI(new PulsingCirclesThrobberUI());
+						throbber.setForeground(Color.WHITE);
+						panel.setPreferredSize(thisFrame.getSize());
+						panel.add(throbber, BorderLayout.CENTER);
+
+						Component glassPane = thisFrame.getGlassPane();
+						thisFrame.setGlassPane(panel);
+						panel.setVisible(true);
+						throbber.setActive(true);
+
 						File file = (File) Clipboard.getClip();
 						String name = file.getName();
 						File dir;
@@ -432,6 +450,10 @@ public class FileManager extends BasicFrame {
 							file.delete();
 						}
 						mainChooser.rescanCurrentDirectory();
+
+						panel.setVisible(false);
+						throbber.setActive(false);
+						thisFrame.setGlassPane(glassPane);
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
