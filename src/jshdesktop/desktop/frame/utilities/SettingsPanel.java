@@ -217,7 +217,7 @@ public class SettingsPanel extends BasicFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					curPing.setText(Launch.getConnectionMan().ping(ni.getIp()) + " ms");
-					lastPinged.setText(format.format(LocalDateTime.now()));
+					lastPinged.setText(format.format(new Date()));
 					generalInfoPanel.revalidate();
 				} catch (Exception e1) {
 					JOptionPane.showInternalMessageDialog(nodeInfoPanel, "Ping failed: " + e1.getMessage(), "Error",
@@ -231,6 +231,8 @@ public class SettingsPanel extends BasicFrame {
 		generalInfoPanel.add(lastPinged);
 		generalInfoPanel.add(curPing);
 		generalInfoPanel.add(pingButton);
+
+		nodeInfoPanel.add(generalInfoPanel, BorderLayout.NORTH);
 
 		return nodeInfoPanel;
 	}
