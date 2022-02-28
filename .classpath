@@ -8,5 +8,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="src/jshdesktop/lib/flatlaf-2.0-rc1.jar"/>
+	<classpathentry kind="lib" path="src/jshdesktop/lib/journey-browser-0.4.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
