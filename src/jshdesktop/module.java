@@ -14,6 +14,7 @@ import terra.shell.launch.Launch;
 import terra.shell.modules.ModuleEvent;
 import terra.shell.modules.ModuleEvent.DummyEvent;
 import terra.shell.utils.keys.Event;
+import terra.shell.utils.system.EventManager;
 import terra.shell.utils.system.GeneralVariable;
 import terra.shell.utils.system.Variables;
 
@@ -29,6 +30,7 @@ public class module extends terra.shell.modules.Module {
 	@Override
 	public void run() {
 		log.debug("Run");
+		EventManager.registerEvType("jshdesktop_initcompletion");
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				main = new JDesktopFrame();
@@ -64,7 +66,7 @@ public class module extends terra.shell.modules.Module {
 		LaunchUpdaterCommand updater = new LaunchUpdaterCommand();
 		Launch.registerCommand(updater.getName(), updater, null);
 		LaunchButtonPreviewCommand buttonPreview = new LaunchButtonPreviewCommand();
-		Launch.registerCommand("buttonPreview", buttonPreview);
+		Launch.registerCommand(buttonPreview.getName(), buttonPreview);
 		LaunchJourneyCommand journeyBrowser = new LaunchJourneyCommand();
 		Launch.registerCommand(journeyBrowser.getName(), journeyBrowser);
 	}

@@ -9,8 +9,10 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 
 import jshdesktop.desktop.DecoratedDesktopPane;
+import jshdesktop.events.InitCompletionEvent;
 import terra.shell.logging.LogManager;
 import terra.shell.logging.Logger;
+import terra.shell.utils.system.EventManager;
 
 public class JDesktopFrame extends JFrame {
 	private Logger log = LogManager.getLogger("DesktopFrame");
@@ -25,6 +27,7 @@ public class JDesktopFrame extends JFrame {
 				GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height);
 		super.add(desktopPane.getMenuBar(), BorderLayout.SOUTH);
 		setVisible(true);
+		EventManager.invokeEvent(new InitCompletionEvent(null));
 	}
 
 	@Override

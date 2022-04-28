@@ -21,6 +21,7 @@ import javax.swing.event.InternalFrameListener;
 import jshdesktop.DesktopManager;
 import jshdesktop.desktop.menu.DesktopMenuBar;
 import jshdesktop.widgets.WidgetFrame;
+import terra.shell.utils.system.EventManager;
 
 public class DecoratedDesktopPane extends JDesktopPane {
 	private Image background;
