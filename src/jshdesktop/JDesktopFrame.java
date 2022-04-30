@@ -9,6 +9,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 
 import jshdesktop.desktop.DecoratedDesktopPane;
+import jshdesktop.desktop.menu.DesktopMenuBar;
 import jshdesktop.events.InitCompletionEvent;
 import terra.shell.logging.LogManager;
 import terra.shell.logging.Logger;
@@ -17,6 +18,7 @@ import terra.shell.utils.system.EventManager;
 public class JDesktopFrame extends JFrame {
 	private Logger log = LogManager.getLogger("DesktopFrame");
 	private DecoratedDesktopPane desktopPane;
+	private DesktopMenuBar menuBar;
 
 	public JDesktopFrame() {
 		log.debug("Creating JDesktopFrame top level...");
@@ -25,7 +27,8 @@ public class JDesktopFrame extends JFrame {
 		super.add(desktopPane);
 		setSize(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width,
 				GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height);
-		super.add(desktopPane.getMenuBar(), BorderLayout.SOUTH);
+		menuBar = desktopPane.getMenuBar();
+		super.add(menuBar, BorderLayout.SOUTH);
 		setVisible(true);
 		EventManager.invokeEvent(new InitCompletionEvent(null));
 	}
@@ -39,5 +42,12 @@ public class JDesktopFrame extends JFrame {
 
 	public JDesktopPane getDesktopPane() {
 		return desktopPane;
+	}
+
+	public void toggleMenuBar() {
+		if (menuBar.isVisible())
+			menuBar.setVisible(false);
+		else
+			menuBar.setVisible(true);
 	}
 }

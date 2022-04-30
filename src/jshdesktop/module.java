@@ -10,6 +10,7 @@ import jshdesktop.commands.LaunchUpdaterCommand;
 import jshdesktop.commands.LaunchVirtualConsoleCommand;
 import jshdesktop.desktop.frame.DialogFrame;
 import jshdesktop.desktop.frame.DialogFrame.DialogType;
+import jshdesktop.events.InitCompletionEvent;
 import terra.shell.launch.Launch;
 import terra.shell.modules.ModuleEvent;
 import terra.shell.modules.ModuleEvent.DummyEvent;
