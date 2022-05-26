@@ -79,8 +79,7 @@ public class JColorSwatch extends JPanel {
 		ContextualMenuHelper.clear(this);
 		if (Boolean.TRUE
 				.equals(getClientProperty(PROPERTY_COPY_CONTEXTUAL_MENU_ITEM))) {
-			String menuItemName = JColorPicker.strings.getObject("Copy")
-					.toString();
+			String menuItemName = "Copy";
 			Runnable runnable = new Runnable() {
 				public void run() {
 					BufferedImage image = new BufferedImage(100, 100,

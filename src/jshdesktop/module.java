@@ -1,5 +1,7 @@
 package jshdesktop;
 
+import java.io.File;
+
 import javax.swing.SwingUtilities;
 
 import jshdesktop.commands.LaunchButtonPreviewCommand;
@@ -10,7 +12,7 @@ import jshdesktop.commands.LaunchUpdaterCommand;
 import jshdesktop.commands.LaunchVirtualConsoleCommand;
 import jshdesktop.desktop.frame.DialogFrame;
 import jshdesktop.desktop.frame.DialogFrame.DialogType;
-import jshdesktop.events.InitCompletionEvent;
+import terra.shell.config.Configuration;
 import terra.shell.launch.Launch;
 import terra.shell.modules.ModuleEvent;
 import terra.shell.modules.ModuleEvent.DummyEvent;
@@ -21,6 +23,7 @@ import terra.shell.utils.system.Variables;
 
 public class module extends terra.shell.modules.Module {
 	private static JDesktopFrame main;
+	private Configuration conf;
 
 	@Override
 	public String getName() {
@@ -31,6 +34,18 @@ public class module extends terra.shell.modules.Module {
 	@Override
 	public void run() {
 		log.debug("Run");
+		conf = Launch.getConfig("JSHDesktop/main.conf");
+		if (conf == null) {
+			log.debug("First time setup, generating main configuration with defaults");
+			File confFile = new File(Launch.getConfD(), "JSHDesktop/main.conf");
+			if (!confFile.getParentFile().exists())
+				confFile.getParentFile().mkdir();
+			conf = new Configuration(confFile);
+			conf.setValue("doStart", "true");
+		}
+		if (((String) conf.getValue("doStart")).equalsIgnoreCase("false")) {
+			return;
+		}
 		EventManager.registerEvType("jshdesktop_initcompletion");
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
