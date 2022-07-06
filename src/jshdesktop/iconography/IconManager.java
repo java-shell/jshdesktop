@@ -96,7 +96,7 @@ public final class IconManager {
 				int index = 0;
 				while (true) {
 					try {
-						index ++;
+						index++;
 						File iconImageFile = new File(iconListing, index + ".png");
 						if (!iconImageFile.exists())
 							break;
@@ -126,8 +126,7 @@ public final class IconManager {
 				continue;
 			}
 			try {
-				Image iconImage = ImageIO.read(iconListing);
-				ImageIcon icon = new ImageIcon(iconImage);
+				ImageIcon icon = new LoadableIcon(iconListing);
 				String iconName = iconListing.getAbsolutePath()
 						.replaceFirst(Launch.getConfD().getParent() + "/modules/jshdesktop/assets/icons", "");
 				iconName = iconName.substring(0, iconName.lastIndexOf("."));
