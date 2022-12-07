@@ -40,7 +40,7 @@ public class DesktopManager {
 			return;
 		desktop = topLevel;
 		init = true;
-		conf = Launch.getConfig("JSHDesktop/dm.conf");
+		conf = Launch.getConfig("/JSHDesktop/dm.conf");
 		if (conf == null) {
 			File confFile = new File(Launch.getConfD(), "JSHDesktop/dm.conf");
 			if (!confFile.exists()) {

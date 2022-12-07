@@ -6,7 +6,6 @@ import javax.swing.SwingUtilities;
 
 import jshdesktop.commands.LaunchButtonPreviewCommand;
 import jshdesktop.commands.LaunchImageViewerCommand;
-import jshdesktop.commands.LaunchJourneyCommand;
 import jshdesktop.commands.LaunchTextEditorCommand;
 import jshdesktop.commands.LaunchUpdaterCommand;
 import jshdesktop.commands.LaunchVirtualConsoleCommand;
@@ -83,8 +82,6 @@ public class module extends terra.shell.modules.Module {
 		Launch.registerCommand(updater.getName(), updater, null);
 		LaunchButtonPreviewCommand buttonPreview = new LaunchButtonPreviewCommand();
 		Launch.registerCommand(buttonPreview.getName(), buttonPreview);
-		LaunchJourneyCommand journeyBrowser = new LaunchJourneyCommand();
-		Launch.registerCommand(journeyBrowser.getName(), journeyBrowser);
 	}
 
 	@Override
