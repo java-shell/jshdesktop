@@ -39,7 +39,7 @@ public class JDesktopFrame extends JFrame {
 			c.setCursor(desktopPane.getCursor());
 		return desktopPane.add(c);
 	}
-
+ 
 	public JDesktopPane getDesktopPane() {
 		return desktopPane;
 	}
