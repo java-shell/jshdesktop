@@ -1,7 +1,12 @@
 package jshdesktop;
 
+import java.awt.GraphicsEnvironment;
 import java.io.File;
+import java.net.URL;
 
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 import jshdesktop.commands.LaunchButtonPreviewCommand;
@@ -22,7 +27,8 @@ import terra.shell.utils.system.Variables;
 
 public class module extends terra.shell.modules.Module {
 	private static JDesktopFrame main;
-	private Configuration conf;
+	private static JFrame splashFrame;
+	private static Configuration conf;
 
 	@Override
 	public String getName() {
@@ -33,22 +39,14 @@ public class module extends terra.shell.modules.Module {
 	@Override
 	public void run() {
 		log.debug("Run");
-		conf = Launch.getConfig("JSHDesktop/main.conf");
-		if (conf == null) {
-			log.debug("First time setup, generating main configuration with defaults");
-			File confFile = new File(Launch.getConfD(), "JSHDesktop/main.conf");
-			if (!confFile.getParentFile().exists())
-				confFile.getParentFile().mkdir();
-			conf = new Configuration(confFile);
-			conf.setValue("doStart", "true");
-		}
 		if (((String) conf.getValue("doStart")).equalsIgnoreCase("false")) {
 			return;
 		}
+
 		EventManager.registerEvType("jshdesktop_initcompletion");
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				main = new JDesktopFrame();
+				main = new JDesktopFrame(splashFrame);
 			}
 		});
 	}
@@ -70,6 +68,41 @@ public class module extends terra.shell.modules.Module {
 
 	@Override
 	public void onEnable() {
+		conf = Launch.getConfig("JSHDesktop/main.conf");
+		if (conf == null) {
+			log.debug("First time setup, generating main configuration with defaults");
+			File confFile = new File(Launch.getConfD(), "JSHDesktop/main.conf");
+			if (!confFile.getParentFile().exists())
+				confFile.getParentFile().mkdir();
+			conf = new Configuration(confFile);
+			conf.setValue("doStart", "true");
+			conf.setValue("splashImage",
+					Launch.getConfD().getParent() + "/modules/jshdesktop/assets/java_shell_logo.gif");
+		}
+
+		ImageIcon splashImageFile = null;
+		try {
+			splashImageFile = new ImageIcon(new URL("file:///" + (String) conf.getValue("splashImage")));
+			JFrame splashFrame = new JFrame();
+			log.log("Starting splash screen");
+			splashFrame = new JFrame();
+			splashFrame.setUndecorated(true);
+			splashFrame.setSize(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width,
+					GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height);
+
+			splashFrame.setLocationRelativeTo(null);
+
+			JLabel splashLabel = new JLabel(splashImageFile);
+			splashFrame.getContentPane().add(splashLabel);
+			splashFrame.pack();
+			splashFrame.setAlwaysOnTop(true);
+			splashFrame.setVisible(true);
+		} catch (Exception e) {
+			log.err("No splash image found...");
+			log.err(e.getLocalizedMessage());
+			splashFrame = null;
+		}
+
 		Variables.setVar(new GeneralVariable("jshDesktop", "true"));
 		log.log("Registering JSHDesktop commands...");
 		LaunchTextEditorCommand textEdit = new LaunchTextEditorCommand();

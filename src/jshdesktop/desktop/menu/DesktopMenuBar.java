@@ -150,11 +150,8 @@ public class DesktopMenuBar extends JMenuBar {
 				clock.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("E hh:mma")));
 			}
 		};
-		t.scheduleAtFixedRate(task,
-				Time.valueOf(LocalTime.of(LocalTime.now().getHour(),
-						(LocalTime.now().getMinute() + 1 == 60 ? LocalTime.now().getMinute() + 1
-								: LocalTime.now().getMinute() + 2))),
-				(60 * 1000));
+		t.scheduleAtFixedRate(task, Time.valueOf(LocalTime.of(LocalTime.now().getHour(),
+				(LocalTime.now().getMinute() + 1 == 60 ? LocalTime.now().getMinute() + 1 : 0))), (60 * 1000));
 
 		this.add(clock);
 		this.add(menu);
