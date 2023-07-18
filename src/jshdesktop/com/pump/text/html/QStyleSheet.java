@@ -32,6 +32,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.html.CSS;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTML.Tag;
+import javax.swing.text.html.StyleSheet;
 
 import jshdesktop.com.pump.text.html.css.CssColorParser;
 import jshdesktop.com.pump.text.html.css.CssHeightParser;
@@ -78,8 +79,6 @@ import jshdesktop.com.pump.text.html.css.border.CssOutlineParser;
 import jshdesktop.com.pump.text.html.css.border.CssOutlineStyleParser;
 import jshdesktop.com.pump.text.html.css.border.CssOutlineWidthParser;
 import jshdesktop.com.pump.util.CombinationIterator;
-
-import javax.swing.text.html.StyleSheet;
 
 /**
  * This specialized StyleSheet offers (limited) support for additional CSS

@@ -20,8 +20,8 @@ import javax.swing.LookAndFeel;
 import javax.swing.plaf.basic.BasicPanelUI;
 
 import jshdesktop.com.pump.util.ObservableProperties;
-import jshdesktop.com.pump.util.WeakSet;
 import jshdesktop.com.pump.util.ObservableProperties.Key;
+import jshdesktop.com.pump.util.WeakSet;
 
 public abstract class AbstractPanelUI extends BasicPanelUI {
 

@@ -20,10 +20,9 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Highlighter.HighlightPainter;
+import javax.swing.text.JTextComponent;
 
 import jshdesktop.com.pump.awt.TextBlock;
-
-import javax.swing.text.JTextComponent;
 
 /**
  * This combines a {@link jshdesktop.com.pump.awt.TextBlock} and a

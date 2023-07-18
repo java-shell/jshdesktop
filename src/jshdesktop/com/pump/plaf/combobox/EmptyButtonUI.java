@@ -18,8 +18,8 @@ import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 
 import jshdesktop.com.pump.plaf.button.ButtonFill;
-import jshdesktop.com.pump.plaf.button.QButtonUI;
 import jshdesktop.com.pump.plaf.button.ButtonState.Float;
+import jshdesktop.com.pump.plaf.button.QButtonUI;
 
 /**
  * This ButtonUI will render the icon/text of a button with no accompanying

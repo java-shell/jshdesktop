@@ -17,11 +17,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import jshdesktop.com.pump.io.parser.ParserException;
-import jshdesktop.com.pump.io.parser.Token;
 import jshdesktop.com.pump.io.parser.Parser.BracketCharToken;
 import jshdesktop.com.pump.io.parser.Parser.StringToken;
 import jshdesktop.com.pump.io.parser.Parser.SymbolCharToken;
+import jshdesktop.com.pump.io.parser.ParserException;
+import jshdesktop.com.pump.io.parser.Token;
 import jshdesktop.com.pump.io.parser.java.JavaParser;
 import jshdesktop.com.pump.io.parser.java.JavaParser.CharToken;
 import jshdesktop.com.pump.io.parser.java.JavaParser.NumberToken;

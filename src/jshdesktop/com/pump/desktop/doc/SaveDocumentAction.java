@@ -31,9 +31,9 @@ import javax.swing.event.ChangeListener;
 import jshdesktop.com.pump.swing.BasicCancellable;
 import jshdesktop.com.pump.swing.Cancellable;
 import jshdesktop.com.pump.swing.DialogFooter;
+import jshdesktop.com.pump.swing.DialogFooter.EscapeKeyBehavior;
 import jshdesktop.com.pump.swing.FileDialogUtils;
 import jshdesktop.com.pump.swing.QDialog;
-import jshdesktop.com.pump.swing.DialogFooter.EscapeKeyBehavior;
 import jshdesktop.com.pump.util.BasicReceiver;
 
 public abstract class SaveDocumentAction extends AbstractAction {

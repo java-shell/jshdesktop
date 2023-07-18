@@ -21,13 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Set;
 
 import jshdesktop.com.pump.data.Key;
 import jshdesktop.com.pump.data.converter.BeanMapConverter;
 import jshdesktop.com.pump.data.converter.ConverterUtils;
-
-import java.util.Objects;
-import java.util.Set;
 
 /**
  * This is a BeanMapConverter for AttributedStrings.

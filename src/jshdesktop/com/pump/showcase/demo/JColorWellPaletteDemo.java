@@ -24,8 +24,8 @@ import javax.swing.event.ChangeListener;
 
 import jshdesktop.com.pump.inspector.Inspector;
 import jshdesktop.com.pump.plaf.ColorWellUI;
-import jshdesktop.com.pump.plaf.PaletteUI;
 import jshdesktop.com.pump.plaf.ColorWellUI.ShowColorPaletteActionListener;
+import jshdesktop.com.pump.plaf.PaletteUI;
 import jshdesktop.com.pump.swing.JColorWell;
 import jshdesktop.com.pump.swing.JPalette;
 import jshdesktop.com.pump.swing.popover.JPopover;

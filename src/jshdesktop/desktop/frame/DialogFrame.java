@@ -8,7 +8,6 @@ import java.util.HashSet;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
 
 import jshdesktop.module;
 

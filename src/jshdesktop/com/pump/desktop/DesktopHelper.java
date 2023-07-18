@@ -32,9 +32,9 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 
 import jshdesktop.com.pump.swing.DialogFooter;
+import jshdesktop.com.pump.swing.DialogFooter.EscapeKeyBehavior;
 import jshdesktop.com.pump.swing.JThrobber;
 import jshdesktop.com.pump.swing.QDialog;
-import jshdesktop.com.pump.swing.DialogFooter.EscapeKeyBehavior;
 import jshdesktop.com.pump.util.JVM;
 
 public class DesktopHelper {

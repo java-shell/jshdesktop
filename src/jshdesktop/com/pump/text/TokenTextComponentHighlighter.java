@@ -18,17 +18,16 @@ import java.util.TreeMap;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Highlighter.HighlightPainter;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.StyledDocument;
 
-import jshdesktop.com.pump.io.parser.ParserException;
-import jshdesktop.com.pump.io.parser.Token;
 import jshdesktop.com.pump.io.parser.Parser.UnparsedToken;
 import jshdesktop.com.pump.io.parser.Parser.WhitespaceToken;
+import jshdesktop.com.pump.io.parser.ParserException;
+import jshdesktop.com.pump.io.parser.Token;
 import jshdesktop.com.pump.util.BasicReceiver;
 import jshdesktop.com.pump.util.FixedCapacityMap;
 import jshdesktop.com.pump.util.Receiver;
-
-import javax.swing.text.JTextComponent;
-import javax.swing.text.StyledDocument;
 
 /**
  * This TextComponentHighlighter relies on {@link Token Tokens}.

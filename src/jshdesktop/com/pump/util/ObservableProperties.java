@@ -33,6 +33,8 @@ import java.util.TreeSet;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import jshdesktop.com.pump.util.list.ObservableList;
+
 /**
  * This manages multiple sets of properties, including listeners.
  * <p>

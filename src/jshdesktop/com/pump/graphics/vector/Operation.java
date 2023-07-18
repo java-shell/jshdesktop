@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import jshdesktop.com.pump.data.converter.ConverterUtils;
 import jshdesktop.com.pump.geom.Clipper;
@@ -34,8 +35,6 @@ import jshdesktop.com.pump.geom.ShapeStringUtils;
 import jshdesktop.com.pump.geom.ShapeUtils;
 import jshdesktop.com.pump.graphics.Graphics2DContext;
 import jshdesktop.com.pump.io.HashCodeOutputStream;
-
-import java.util.Objects;
 
 /**
  * Each Operation subclass corresponds to one or more painting methods in the

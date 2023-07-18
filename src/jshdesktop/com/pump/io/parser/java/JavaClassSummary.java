@@ -26,8 +26,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Stack;
 
-import jshdesktop.com.pump.io.parser.Token;
 import jshdesktop.com.pump.io.parser.Parser.BracketCharToken;
+import jshdesktop.com.pump.io.parser.Token;
 import jshdesktop.com.pump.io.parser.java.JavaParser.BracketType;
 import jshdesktop.com.pump.io.parser.java.JavaParser.DeclarationType;
 import jshdesktop.com.pump.io.parser.java.JavaParser.JavaModifier;

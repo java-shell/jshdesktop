@@ -5,10 +5,8 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.GraphicsEnvironment;
 
-import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 import jshdesktop.desktop.DecoratedDesktopPane;
 import jshdesktop.desktop.menu.DesktopMenuBar;

@@ -34,10 +34,10 @@ import jshdesktop.com.pump.debug.AWTMonitor;
 import jshdesktop.com.pump.debug.AWTPanicListener;
 import jshdesktop.com.pump.swing.BasicConsole;
 import jshdesktop.com.pump.swing.DialogFooter;
+import jshdesktop.com.pump.swing.DialogFooter.EscapeKeyBehavior;
 import jshdesktop.com.pump.swing.JFancyBox;
 import jshdesktop.com.pump.swing.JThrobber;
 import jshdesktop.com.pump.swing.QDialog;
-import jshdesktop.com.pump.swing.DialogFooter.EscapeKeyBehavior;
 
 /**
  * This is a simple app demoing the {@link AWTMonitor}

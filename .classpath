@@ -9,5 +9,10 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="src/jshdesktop/lib/flatlaf-2.0-rc1.jar"/>
 	<classpathentry kind="lib" path="src/jshdesktop/lib/journey-browser-0.4.0.jar"/>
+	<classpathentry kind="lib" path="/java-shell/lib/hklib-1.3.1/hklib-1.3.1.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/java-shell/lib/hklib-1.3.1/hklib-1.3.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

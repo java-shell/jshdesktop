@@ -24,9 +24,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import jshdesktop.com.pump.io.CombinedInputStream;
-import jshdesktop.com.pump.io.parser.Token;
 import jshdesktop.com.pump.io.parser.Parser.SkipWhiteSpaceReceiver;
 import jshdesktop.com.pump.io.parser.Parser.StringToken;
+import jshdesktop.com.pump.io.parser.Token;
 import jshdesktop.com.pump.io.parser.xml.XMLParser.AssignmentToken;
 import jshdesktop.com.pump.io.parser.xml.XMLParser.EndPrologToken;
 import jshdesktop.com.pump.io.parser.xml.XMLParser.StartPrologToken;

@@ -26,6 +26,7 @@ import jshdesktop.com.pump.image.gif.block.GifColorTable;
 import jshdesktop.com.pump.image.gif.block.GifCommentExtension;
 import jshdesktop.com.pump.image.gif.block.GifGlobalColorTable;
 import jshdesktop.com.pump.image.gif.block.GifGraphicControlExtension;
+import jshdesktop.com.pump.image.gif.block.GifGraphicControlExtension.DisposalMethod;
 import jshdesktop.com.pump.image.gif.block.GifImageDataBlock;
 import jshdesktop.com.pump.image.gif.block.GifImageDescriptor;
 import jshdesktop.com.pump.image.gif.block.GifInterlace;
@@ -34,7 +35,6 @@ import jshdesktop.com.pump.image.gif.block.GifLogicalScreenDescriptor;
 import jshdesktop.com.pump.image.gif.block.GifLoopingApplicationExtension;
 import jshdesktop.com.pump.image.gif.block.GifParser;
 import jshdesktop.com.pump.image.gif.block.GifPlainTextExtension;
-import jshdesktop.com.pump.image.gif.block.GifGraphicControlExtension.DisposalMethod;
 
 /**
  * This is an efficient way to iterate through a GIF image. This efficiently

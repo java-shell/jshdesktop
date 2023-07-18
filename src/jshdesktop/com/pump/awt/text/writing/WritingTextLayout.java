@@ -28,8 +28,8 @@ import jshdesktop.com.pump.animation.writing.WritingShape;
 import jshdesktop.com.pump.animation.writing.WritingStroke;
 import jshdesktop.com.pump.awt.Dimension2D;
 import jshdesktop.com.pump.util.ObservableProperties;
-import jshdesktop.com.pump.util.Resettable;
 import jshdesktop.com.pump.util.ObservableProperties.Key;
+import jshdesktop.com.pump.util.Resettable;
 
 /**
  * Analogous to a <code>java.awt.font.TextLayout</code>, this helps lay out

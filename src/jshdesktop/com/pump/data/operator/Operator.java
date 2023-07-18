@@ -24,12 +24,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import jshdesktop.com.pump.util.CombinationIterator;
-
 import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import jshdesktop.com.pump.util.CombinationIterator;
 
 /**
  * An Operator is something that can be evaluated as true or false.

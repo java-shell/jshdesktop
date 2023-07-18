@@ -19,10 +19,10 @@ import java.io.OutputStream;
 import java.util.LinkedList;
 
 import jshdesktop.com.pump.image.gif.block.GifGraphicControlExtension;
+import jshdesktop.com.pump.image.gif.block.GifGraphicControlExtension.DisposalMethod;
 import jshdesktop.com.pump.image.gif.block.GifImageDataBlock;
 import jshdesktop.com.pump.image.gif.block.GifImageDescriptor;
 import jshdesktop.com.pump.image.gif.block.GifLocalColorTable;
-import jshdesktop.com.pump.image.gif.block.GifGraphicControlExtension.DisposalMethod;
 import jshdesktop.com.pump.image.pixel.BufferedImageIterator;
 import jshdesktop.com.pump.image.pixel.IntARGBConverter;
 

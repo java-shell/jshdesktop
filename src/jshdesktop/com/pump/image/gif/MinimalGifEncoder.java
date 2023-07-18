@@ -17,10 +17,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import jshdesktop.com.pump.image.gif.block.GifGraphicControlExtension;
+import jshdesktop.com.pump.image.gif.block.GifGraphicControlExtension.DisposalMethod;
 import jshdesktop.com.pump.image.gif.block.GifImageDataBlock;
 import jshdesktop.com.pump.image.gif.block.GifImageDescriptor;
 import jshdesktop.com.pump.image.gif.block.GifLocalColorTable;
-import jshdesktop.com.pump.image.gif.block.GifGraphicControlExtension.DisposalMethod;
 
 /**
  * The minimal, bare-bones GIF encoder.

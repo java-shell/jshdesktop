@@ -20,11 +20,11 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import jshdesktop.com.pump.io.parser.Token;
 import jshdesktop.com.pump.io.parser.Parser.CommentToken;
 import jshdesktop.com.pump.io.parser.Parser.StringToken;
 import jshdesktop.com.pump.io.parser.Parser.SymbolCharToken;
 import jshdesktop.com.pump.io.parser.Parser.UnparsedToken;
+import jshdesktop.com.pump.io.parser.Token;
 import jshdesktop.com.pump.io.parser.java.JavaParser;
 import jshdesktop.com.pump.io.parser.java.JavaParser.CharToken;
 import jshdesktop.com.pump.io.parser.java.JavaParser.WordToken;

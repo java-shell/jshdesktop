@@ -41,8 +41,8 @@ import jshdesktop.com.pump.awt.SplayedLayout;
 import jshdesktop.com.pump.icon.IconUtils;
 import jshdesktop.com.pump.icon.TriangleIcon;
 import jshdesktop.com.pump.swing.JBreadCrumb;
-import jshdesktop.com.pump.swing.NavigationListener;
 import jshdesktop.com.pump.swing.JBreadCrumb.BreadCrumbFormatter;
+import jshdesktop.com.pump.swing.NavigationListener;
 import jshdesktop.com.pump.swing.NavigationListener.ListSelectionType;
 
 /**

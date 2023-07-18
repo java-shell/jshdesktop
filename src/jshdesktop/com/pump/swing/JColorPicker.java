@@ -20,7 +20,6 @@ import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;

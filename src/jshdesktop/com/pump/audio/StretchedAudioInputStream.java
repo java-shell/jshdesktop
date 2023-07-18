@@ -19,10 +19,9 @@ import java.io.PipedOutputStream;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioFormat.Encoding;
+import javax.sound.sampled.AudioInputStream;
 
 import jshdesktop.com.pump.math.function.PolynomialFunction;
-
-import javax.sound.sampled.AudioInputStream;
 
 /**
  * This stretches an AudioInputStream so it plays back slower or faster than

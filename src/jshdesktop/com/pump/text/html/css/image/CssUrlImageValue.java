@@ -36,8 +36,8 @@ import jshdesktop.com.pump.text.html.css.CssLength;
 import jshdesktop.com.pump.text.html.css.background.CssBackgroundAttachmentValue;
 import jshdesktop.com.pump.text.html.css.background.CssBackgroundPositionValue;
 import jshdesktop.com.pump.text.html.css.background.CssBackgroundRepeatValue;
-import jshdesktop.com.pump.text.html.css.background.CssBackgroundSizeValue;
 import jshdesktop.com.pump.text.html.css.background.CssBackgroundRepeatValue.Span;
+import jshdesktop.com.pump.text.html.css.background.CssBackgroundSizeValue;
 import jshdesktop.com.pump.text.html.view.QViewHelper;
 import jshdesktop.com.pump.util.Cache;
 

@@ -27,10 +27,9 @@ import java.awt.geom.Rectangle2D;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.SortedMap;
 
 import jshdesktop.com.pump.geom.TransformUtils;
-
-import java.util.SortedMap;
 
 public class LineChartRenderer {
 

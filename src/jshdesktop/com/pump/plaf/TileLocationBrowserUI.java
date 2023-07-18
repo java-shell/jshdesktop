@@ -46,10 +46,10 @@ import javax.swing.event.ListSelectionListener;
 
 import jshdesktop.com.pump.io.location.IOLocation;
 import jshdesktop.com.pump.swing.io.IOLocationTileList;
+import jshdesktop.com.pump.swing.io.IOLocationTileList.BasicTileCellRenderer;
 import jshdesktop.com.pump.swing.io.LocationBrowser;
 import jshdesktop.com.pump.swing.io.LocationPane;
 import jshdesktop.com.pump.swing.io.OpenLocationPane;
-import jshdesktop.com.pump.swing.io.IOLocationTileList.BasicTileCellRenderer;
 import jshdesktop.com.pump.util.JVM;
 import jshdesktop.com.pump.util.list.ObservableList;
 

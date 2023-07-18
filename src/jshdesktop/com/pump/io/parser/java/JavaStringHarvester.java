@@ -20,8 +20,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import jshdesktop.com.pump.io.parser.Token;
 import jshdesktop.com.pump.io.parser.Parser.StringToken;
+import jshdesktop.com.pump.io.parser.Token;
 import jshdesktop.com.pump.util.Receiver;
 
 /** This collects all the Strings in a java source file. */
