@@ -16,11 +16,14 @@ import jshdesktop.commands.LaunchUpdaterCommand;
 import jshdesktop.commands.LaunchVirtualConsoleCommand;
 import jshdesktop.desktop.frame.DialogFrame;
 import jshdesktop.desktop.frame.DialogFrame.DialogType;
+import jshdesktop.lua.JSHDesktopLuaLibrary;
 import terra.shell.config.Configuration;
 import terra.shell.launch.Launch;
 import terra.shell.modules.ModuleEvent;
 import terra.shell.modules.ModuleEvent.DummyEvent;
 import terra.shell.utils.keys.Event;
+import terra.shell.utils.lua.LuaHookManager;
+import terra.shell.utils.lua.exceptions.LuaLibraryLoadException;
 import terra.shell.utils.system.EventManager;
 import terra.shell.utils.system.GeneralVariable;
 import terra.shell.utils.system.Variables;
@@ -115,6 +118,12 @@ public class module extends terra.shell.modules.Module {
 		Launch.registerCommand(updater.getName(), updater, null);
 		LaunchButtonPreviewCommand buttonPreview = new LaunchButtonPreviewCommand();
 		Launch.registerCommand(buttonPreview.getName(), buttonPreview);
+
+		try {
+			LuaHookManager.registerHook("Desktop", JSHDesktopLuaLibrary.DESKTOP);
+		} catch (LuaLibraryLoadException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

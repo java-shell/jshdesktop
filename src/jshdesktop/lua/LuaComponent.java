@@ -522,6 +522,90 @@ public class LuaComponent extends LuaUserdata {
 	static {
 		luaComponentMetatable.rawSet("__name", Lua.newString("COMPONENT"));
 		luaComponentMetatable.rawSet("__index", luaComponentMetatable);
+
+		LuaObject setSizeFunction = Lua.newFunc(new Consumer<LuaObject[]>() {
+
+			@Override
+			public void accept(LuaObject[] args) {
+				Lua.checkArgs("SetSize", args, LuaType.USERDATA, LuaType.INTEGER, LuaType.INTEGER);
+				LuaComponent lc = (LuaComponent) args[0];
+				lc.internalComp.setSize(args[1].getInt(), args[2].getInt());
+			}
+
+		});
+
+		LuaObject getSizeFunction = Lua.newMethod(new LuaMethod() {
+
+			@Override
+			public LuaObject call(LuaInterpreter arg0, LuaObject[] args) {
+				Lua.checkArgs("GetSize", args, LuaType.USERDATA);
+				LuaComponent lc = (LuaComponent) args[0];
+
+				LuaObject dimensionTable = Lua.newTable();
+				dimensionTable.rawSet(0, lc.internalComp.getWidth());
+				dimensionTable.rawSet(1, lc.internalComp.getHeight());
+				return dimensionTable;
+			}
+
+		});
+
+		LuaObject addLuaComponentFunction = Lua.newFunc(new Consumer<LuaObject[]>() {
+
+			@Override
+			public void accept(LuaObject[] args) {
+				Lua.checkArgs("AddComponent", args, LuaType.USERDATA, LuaType.USERDATA);
+				LuaComponent main = (LuaComponent) args[0];
+				LuaComponent toAdd = (LuaComponent) args[1];
+				main.internalComp.add(toAdd.internalComp);
+			}
+
+		});
+
+		LuaObject removeLuaComponentFunction = Lua.newFunc(new Consumer<LuaObject[]>() {
+
+			@Override
+			public void accept(LuaObject[] args) {
+				Lua.checkArgs("RemoveComponent", args, LuaType.USERDATA, LuaType.USERDATA);
+				LuaComponent main = (LuaComponent) args[0];
+				LuaComponent toAdd = (LuaComponent) args[1];
+				main.internalComp.remove(toAdd.internalComp);
+			}
+
+		});
+
+		LuaObject setBoundsFunction = Lua.newFunc(new Consumer<LuaObject[]>() {
+
+			@Override
+			public void accept(LuaObject[] args) {
+				Lua.checkArgs("SetBounds", args, LuaType.USERDATA, LuaType.INTEGER, LuaType.INTEGER, LuaType.INTEGER,
+						LuaType.INTEGER);
+				LuaComponent lc = (LuaComponent) args[0];
+				int width = args[3].getInt();
+				int height = args[4].getInt();
+				int x = args[1].getInt();
+				int y = args[2].getInt();
+				lc.internalComp.setBounds(x, y, width, height);
+			}
+
+		});
+
+		LuaObject setGraphicsEventHandler = Lua.newFunc(new Consumer<LuaObject[]>() {
+
+			@Override
+			public void accept(LuaObject[] args) {
+				Lua.checkArgs("SetGraphicsEventHandler", args, LuaType.USERDATA, LuaType.ANY);
+				LuaComponent lc = (LuaComponent) args[0];
+				lc.paintFunction = args[1];
+			}
+
+		});
+
+		luaComponentMetatable.rawSet("SetSize", setSizeFunction);
+		luaComponentMetatable.rawSet("GetSize", getSizeFunction);
+		luaComponentMetatable.rawSet("AddComponent", addLuaComponentFunction);
+		luaComponentMetatable.rawSet("RemoveComponent", removeLuaComponentFunction);
+		luaComponentMetatable.rawSet("SetBounds", setBoundsFunction);
+		luaComponentMetatable.rawSet("SetGraphicsEventHandler", setGraphicsEventHandler);
 	}
 
 }
