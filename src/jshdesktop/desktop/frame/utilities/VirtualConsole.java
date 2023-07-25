@@ -39,7 +39,6 @@ public class VirtualConsole extends BasicFrame {
 
 	public VirtualConsole() {
 		setTitle("vterm");
-		cmds = Launch.getCmds();
 		Thread th = new Thread(new Runnable() {
 			public void run() {
 				t = new Terminal();
@@ -78,6 +77,7 @@ public class VirtualConsole extends BasicFrame {
 
 	@Override
 	public void create() {
+		cmds = Launch.getCmds();
 		JPanel mainPanel = new JPanel();
 		JPanel inputPanel = new JPanel();
 		outPut = new JTextArea();

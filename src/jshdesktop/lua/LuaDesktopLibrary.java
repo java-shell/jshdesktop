@@ -1,9 +1,11 @@
 package jshdesktop.lua;
 
+import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Base64;
 import java.util.function.BiConsumer;
@@ -17,6 +19,10 @@ import com.hk.lua.LuaInterpreter;
 import com.hk.lua.LuaObject;
 import com.hk.lua.LuaType;
 
+import jshdesktop.com.pump.plaf.PulsingCirclesThrobberUI;
+import jshdesktop.com.pump.plaf.ThrobberUI;
+import jshdesktop.lua.components.LuaThrobber;
+import jshdesktop.lua.frame.LuaBasicFrame;
 import jshdesktop.lua.frame.LuaFrame;
 import jshdesktop.lua.image.LuaImageWrapper;
 
@@ -30,6 +36,61 @@ public enum LuaDesktopLibrary implements BiConsumer<Environment, LuaObject>, Lua
 		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
 			return new LuaFrame(interp);
 		}
+	},
+	CreateBasicFrame {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			Lua.checkArgs(name(), args, LuaType.USERDATA);
+			if (!(args[0] instanceof LuaComponent))
+				Lua.badArgument(0, "CreateBasicFrame", "Expected LuaComponent");
+			return new LuaBasicFrame(interp, (LuaComponent) args[0]);
+		}
+	},
+	CreateThrobber {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			if (args.length == 1) {
+				if (args[0].type() != LuaType.TABLE)
+					Lua.badArgument(0, "CreateThrobber", "Table Expected");
+
+				LuaObject colorObject = args[0].getIndex(interp, "Color");
+				LuaObject UIObject = args[0].getIndex(interp, "UI");
+				String colorString = "white";
+				String UIString = "PULSING_CIRCLES";
+
+				if (colorObject != null)
+					colorString = colorObject.getString();
+
+				if (UIObject != null)
+					UIString = UIObject.getString();
+
+				Color color = null;
+				ThrobberUI ui = null;
+
+				try {
+					Field colorField = Class.forName("java.awt.Color").getField(colorString);
+					color = (Color) colorField.get(null);
+				} catch (Exception e) {
+					color = Color.WHITE;
+				}
+
+				switch (UIString) {
+				case "PULSING_CIRCLES":
+					ui = new PulsingCirclesThrobberUI();
+					break;
+				case "AQUA":
+					ui = new jshdesktop.com.pump.plaf.AquaThrobberUI();
+					break;
+				case "CHASING_ARROWS":
+					ui = new jshdesktop.com.pump.plaf.ChasingArrowsThrobberUI();
+					break;
+				default:
+					ui = new PulsingCirclesThrobberUI();
+				}
+
+				return new LuaThrobber(ui, color);
+			}
+			return new LuaThrobber();
+		}
+
 	},
 	GetImageFromBase64 {
 		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {

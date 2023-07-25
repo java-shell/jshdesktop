@@ -3,6 +3,7 @@ package jshdesktop.lua;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -48,8 +49,10 @@ public class LuaComponent extends LuaUserdata {
 
 		@Override
 		public void paintComponent(Graphics g) {
-			if (paintFunction != null)
-				paintFunction.call(interp, new LuaGraphicsWrapper(g));
+			if (paintFunction != null) {
+				LuaGraphicsWrapper lgw = new LuaGraphicsWrapper(g);
+				paintFunction.call(interp, lgw);
+			}
 		}
 
 	}
@@ -69,7 +72,7 @@ public class LuaComponent extends LuaUserdata {
 
 		@Override
 		public Object getUserdata() {
-			return null;
+			return this;
 		}
 
 		private Graphics getGraphics() {
@@ -78,7 +81,7 @@ public class LuaComponent extends LuaUserdata {
 
 		@Override
 		public String name() {
-			return null;
+			return "Graphics";
 		}
 
 		static {
@@ -317,7 +320,7 @@ public class LuaComponent extends LuaUserdata {
 
 				@Override
 				public void accept(LuaObject[] args) {
-					Lua.checkArgs("DrawString", args, LuaType.USERDATA, LuaType.STRING, LuaType.INTEGER,
+					Lua.checkArgs("DrawString", args, LuaType.USERDATA, LuaType.ANY, LuaType.INTEGER,
 							LuaType.INTEGER);
 
 					LuaGraphicsWrapper lgw = (LuaGraphicsWrapper) args[0];
@@ -453,7 +456,17 @@ public class LuaComponent extends LuaUserdata {
 					Lua.checkArgs("SetColor", args, LuaType.USERDATA, LuaType.STRING);
 
 					LuaGraphicsWrapper lgw = (LuaGraphicsWrapper) args[0];
-					lgw.getGraphics().setColor(Color.getColor(args[1].getString()));
+
+					Color newColor = null;
+
+					try {
+						Field colorField = Class.forName("java.awt.Color").getField(args[1].getString());
+						newColor = (Color) colorField.get(null);
+					} catch (Exception e) {
+						newColor = null;
+					}
+
+					lgw.getGraphics().setColor(newColor);
 				}
 
 			});
@@ -509,6 +522,7 @@ public class LuaComponent extends LuaUserdata {
 			luaGraphicsWrapperMetatable.rawSet("DrawString", drawStringFunction);
 			luaGraphicsWrapperMetatable.rawSet("Fill3dRect", fill3DRectFunction);
 			luaGraphicsWrapperMetatable.rawSet("FillArc", fillArcFunction);
+			luaGraphicsWrapperMetatable.rawSet("FillOval", fillOvalFunction);
 			luaGraphicsWrapperMetatable.rawSet("FillPolygon", fillPolygonFunction);
 			luaGraphicsWrapperMetatable.rawSet("FillRect", fillRectFunction);
 			luaGraphicsWrapperMetatable.rawSet("FillRoundRect", fillRoundRectFunction);
@@ -600,12 +614,24 @@ public class LuaComponent extends LuaUserdata {
 
 		});
 
+		LuaObject repaintFunction = Lua.newFunc(new Consumer<LuaObject[]>() {
+
+			@Override
+			public void accept(LuaObject[] args) {
+				Lua.checkArgs("Repaint", args, LuaType.USERDATA);
+				LuaComponent lc = (LuaComponent) args[0];
+				lc.internalComp.repaint();
+			}
+
+		});
+
 		luaComponentMetatable.rawSet("SetSize", setSizeFunction);
 		luaComponentMetatable.rawSet("GetSize", getSizeFunction);
 		luaComponentMetatable.rawSet("AddComponent", addLuaComponentFunction);
 		luaComponentMetatable.rawSet("RemoveComponent", removeLuaComponentFunction);
 		luaComponentMetatable.rawSet("SetBounds", setBoundsFunction);
 		luaComponentMetatable.rawSet("SetGraphicsEventHandler", setGraphicsEventHandler);
+		luaComponentMetatable.rawSet("Repaint", repaintFunction);
 	}
 
 }
