@@ -83,63 +83,56 @@ import jshdesktop.com.pump.util.WeakSet;
  * priority-based model. As a use case: consider a gap that has a priority of 1,
  * and a scrollpane that has a priority of 2.
  * 
- * @see <a
- *      href="https://javagraphics.blogspot.com/2014/03/panels-collapsible-sections.html">Panels:
+ * @see <a href=
+ *      "https://javagraphics.blogspot.com/2014/03/panels-collapsible-sections.html">Panels:
  *      Collapsible Sections</a>
  */
 public class CollapsibleContainer extends SectionContainer {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * A property name for a Section that maps to the JButton used as a header
-	 * for that Section.
+	 * A property name for a Section that maps to the JButton used as a header for
+	 * that Section.
 	 */
-	protected static final String HEADER = CollapsibleContainer.class.getName()
-			+ ".header";
+	protected static final String HEADER = CollapsibleContainer.class.getName() + ".header";
 
 	/**
-	 * A property name for a Section that identifies its vertical weight. When
-	 * it is absent the vertical weight is assumed to be zero.
+	 * A property name for a Section that identifies its vertical weight. When it is
+	 * absent the vertical weight is assumed to be zero.
 	 */
-	public static final String VERTICAL_WEIGHT = CollapsibleContainer.class
-			.getName() + ".vertical-weight";
+	public static final String VERTICAL_WEIGHT = CollapsibleContainer.class.getName() + ".vertical-weight";
 
 	/**
-	 * A client property name for the JButton header of a <code>Section</code>
-	 * that determines whether a the user can collapse/expand a section.
+	 * A client property name for the JButton header of a <code>Section</code> that
+	 * determines whether a the user can collapse/expand a section.
 	 */
-	public static final String COLLAPSIBLE = CollapsibleContainer.class
-			.getName() + ".collapsible";
+	public static final String COLLAPSIBLE = CollapsibleContainer.class.getName() + ".collapsible";
 
 	/**
-	 * A client property name for the JButton header of a <code>Section</code>
-	 * that determines whether a Section is collapsed.
+	 * A client property name for the JButton header of a <code>Section</code> that
+	 * determines whether a Section is collapsed.
 	 */
-	public static final String COLLAPSED = CollapsibleContainer.class.getName()
-			+ ".collapsed";
+	public static final String COLLAPSED = CollapsibleContainer.class.getName() + ".collapsed";
 
 	/**
-	 * A client property name for the JButton header of a <code>Section</code>
-	 * that determines the current rotation of the triangle. (This will vary a
-	 * lot during animation.)
+	 * A client property name for the JButton header of a <code>Section</code> that
+	 * determines the current rotation of the triangle. (This will vary a lot during
+	 * animation.)
 	 */
-	protected static final String ROTATION = CollapsibleContainer.class
-			.getName() + ".rotation";
+	protected static final String ROTATION = CollapsibleContainer.class.getName() + ".rotation";
 
 	/**
-	 * A client property name for the JButton header of a <code>Section</code>
-	 * that determines the target rotation of the triangle. (This is generally 1
-	 * of 2 values: open or closed.)
+	 * A client property name for the JButton header of a <code>Section</code> that
+	 * determines the target rotation of the triangle. (This is generally 1 of 2
+	 * values: open or closed.)
 	 */
-	protected static final String TARGET_ROTATION = CollapsibleContainer.class
-			.getName() + ".target-rotation";
+	protected static final String TARGET_ROTATION = CollapsibleContainer.class.getName() + ".target-rotation";
 
 	/**
 	 * A client property name for the JButton header that maps to the
 	 * <code>Section</code> this header relates to.
 	 */
-	protected static final String SECTION = CollapsibleContainer.class
-			.getName() + ".section";
+	protected static final String SECTION = CollapsibleContainer.class.getName() + ".section";
 
 	/**
 	 * The duration in seconds for animating section heights
@@ -147,9 +140,8 @@ public class CollapsibleContainer extends SectionContainer {
 	private static float ANIMATION_DURATION = .2f;
 
 	/**
-	 * This contains the preferred layout of this container at a given instant.
-	 * This layout can be installed in one instant or incrementally (for
-	 * animation)
+	 * This contains the preferred layout of this container at a given instant. This
+	 * layout can be installed in one instant or incrementally (for animation)
 	 */
 	class LayoutBlueprint extends AnimationManager.Adjuster<Float> {
 
@@ -175,8 +167,7 @@ public class CollapsibleContainer extends SectionContainer {
 				JPanel body = section.getBody();
 				JButton header = getHeader(section);
 
-				Boolean collapsed = (Boolean) header
-						.getClientProperty(COLLAPSED);
+				Boolean collapsed = (Boolean) header.getClientProperty(COLLAPSED);
 				if (collapsed == null)
 					collapsed = Boolean.FALSE;
 				if (!header.isVisible())
@@ -309,8 +300,7 @@ public class CollapsibleContainer extends SectionContainer {
 					JComponent jc = components.get(a);
 					int originalHeight = originalHeightMap.get(jc);
 					int targetHeight = heightMap.get(jc);
-					int newHeight = (int) (targetHeight * (fraction)
-							+ originalHeight * (1 - fraction) + .5);
+					int newHeight = (int) (targetHeight * (fraction) + originalHeight * (1 - fraction) + .5);
 					if (Math.abs(targetHeight - newHeight) <= 1)
 						newHeight = targetHeight;
 
@@ -358,15 +348,13 @@ public class CollapsibleContainer extends SectionContainer {
 
 		/**
 		 * 
-		 * @param usePreferred
-		 *            true for preferred size, false for minimum size
+		 * @param usePreferred true for preferred size, false for minimum size
 		 */
 		private Dimension calculateSize(Container parent, boolean usePreferred) {
 			Dimension size = new Dimension();
 			for (int a = 0; a < parent.getComponentCount(); a++) {
 				Component comp = parent.getComponent(a);
-				Dimension d = usePreferred ? comp.getPreferredSize() : comp
-						.getMinimumSize();
+				Dimension d = usePreferred ? comp.getPreferredSize() : comp.getMinimumSize();
 				size.width = Math.max(size.width, d.width);
 				size.height += d.height;
 			}
@@ -464,8 +452,7 @@ public class CollapsibleContainer extends SectionContainer {
 						JComponent jc = (JComponent) child;
 						Border b = jc.getBorder();
 						Insets i = b == null ? null : b.getBorderInsets(jc);
-						boolean hasBorder = i != null && i.left > 0
-								&& i.right > 0 && i.top > 0 && i.bottom > 0;
+						boolean hasBorder = i != null && i.left > 0 && i.right > 0 && i.top > 0 && i.bottom > 0;
 						ui.setFillColor(child.getBackground());
 						ui.setCornerSize(0);
 						ui.setShadowSize(0);
@@ -478,8 +465,7 @@ public class CollapsibleContainer extends SectionContainer {
 						ui.setCornerSize(0);
 						ui.setShadowSize(0);
 						ui.setStrokeColor(new Color(0, 0, 0, 0));
-					} else if (child.isOpaque()
-							&& child.getBackground().getAlpha() > 0) {
+					} else if (child.isOpaque() && child.getBackground().getAlpha() > 0) {
 						ui.setCornerSize(1);
 					}
 				}
@@ -500,7 +486,6 @@ public class CollapsibleContainer extends SectionContainer {
 		if (header == null) {
 			header = createHeader(section);
 			final JButton headerRef = header;
-
 			PropertyChangeListener nameListener = new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent evt) {
 					if (evt == null || NAME.equals(evt.getPropertyName())) {
@@ -511,19 +496,15 @@ public class CollapsibleContainer extends SectionContainer {
 			section.addPropertyChangeListener(nameListener);
 			nameListener.propertyChange(null);
 
-			header.addPropertyChangeListener(COLLAPSED,
-					new PropertyChangeListener() {
-						public void propertyChange(PropertyChangeEvent evt) {
-							midanimation.acquireUninterruptibly();
-							animatingBlueprint = new LayoutBlueprint(true);
-							String p = CollapsibleContainer.class.getName()
-									+ "#temp";
-							putClientProperty(p, 0f);
-							AnimationManager.setTargetProperty(
-									CollapsibleContainer.this, p,
-									animatingBlueprint);
-						}
-					});
+			header.addPropertyChangeListener(COLLAPSED, new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent evt) {
+					midanimation.acquireUninterruptibly();
+					animatingBlueprint = new LayoutBlueprint(true);
+					String p = CollapsibleContainer.class.getName() + "#temp";
+					putClientProperty(p, 0f);
+					AnimationManager.setTargetProperty(CollapsibleContainer.this, p, animatingBlueprint);
+				}
+			});
 
 			section.setProperty(HEADER, header);
 			headers.add(header);
@@ -534,15 +515,15 @@ public class CollapsibleContainer extends SectionContainer {
 	}
 
 	/**
-	 * @return a button that can toggle the property <code>COLLAPSED</code> if
-	 *         the property <code>COLLAPSIBLE</code> is <code>true</code>.
+	 * @return a button that can toggle the property <code>COLLAPSED</code> if the
+	 *         property <code>COLLAPSIBLE</code> is <code>true</code>.
 	 *         <p>
 	 *         This button (by default) uses a <code>QButtonUI</code>, so if you
-	 *         configure it's position then you can toggle off certain parts of
-	 *         the border.
+	 *         configure it's position then you can toggle off certain parts of the
+	 *         border.
 	 *         <p>
-	 *         The following property of this button are automatically
-	 *         maintained through a set of listeners:
+	 *         The following property of this button are automatically maintained
+	 *         through a set of listeners:
 	 *         <ul>
 	 *         <li>Request Focus Enabled</li>
 	 *         <li>Focusable</li>
@@ -557,21 +538,20 @@ public class CollapsibleContainer extends SectionContainer {
 
 	/**
 	 * 
-	 * @param text
-	 *            the text in this button
-	 * @param includeLeftAndRightEdges
-	 *            whether the left and right edges should be visible
-	 * @param collapsible
-	 *            whether this button should initially be collapsible.
-	 * @return a button that can toggle the property <code>COLLAPSED</code> if
-	 *         the property <code>COLLAPSIBLE</code> is <code>true</code>.
+	 * @param text                     the text in this button
+	 * @param includeLeftAndRightEdges whether the left and right edges should be
+	 *                                 visible
+	 * @param collapsible              whether this button should initially be
+	 *                                 collapsible.
+	 * @return a button that can toggle the property <code>COLLAPSED</code> if the
+	 *         property <code>COLLAPSIBLE</code> is <code>true</code>.
 	 *         <p>
 	 *         This button (by default) uses a <code>QButtonUI</code>, so if you
-	 *         configure it's position then you can toggle off certain parts of
-	 *         the border.
+	 *         configure it's position then you can toggle off certain parts of the
+	 *         border.
 	 *         <p>
-	 *         The following property of this button are automatically
-	 *         maintained through a set of listeners:
+	 *         The following property of this button are automatically maintained
+	 *         through a set of listeners:
 	 *         <ul>
 	 *         <li>Request Focus Enabled</li>
 	 *         <li>Focusable</li>
@@ -580,27 +560,23 @@ public class CollapsibleContainer extends SectionContainer {
 	 *         <li>Internal properties including ROTATION and TARGET_ROTATION</li>
 	 *         </ul>
 	 */
-	public static JButton createCollapsibleButton(String text,
-			boolean collapsible) {
+	public static JButton createCollapsibleButton(String text, boolean collapsible) {
 		final JButton button = new JButton();
 		QButtonUI ui = new GradientButtonUI();
 		button.setContentAreaFilled(false);
 		button.setUI(ui);
 		button.setRequestFocusEnabled(false);
-		button.setMargin(new Insets(0,0,0,0));
-		button.putClientProperty(QButtonUI.PROPERTY_STROKE_PAINTED,
-				Boolean.FALSE);
+		button.setMargin(new Insets(0, 0, 0, 0));
+		button.putClientProperty(QButtonUI.PROPERTY_STROKE_PAINTED, Boolean.FALSE);
 
 		button.setFont(UIManager.getFont("Label.font"));
 		button.setText(text);
-		button.putClientProperty(QButtonUI.PROPERTY_HORIZONTAL_POSITION,
-				HorizontalPosition.MIDDLE);
+		button.putClientProperty(QButtonUI.PROPERTY_HORIZONTAL_POSITION, HorizontalPosition.MIDDLE);
 
 		// TODO: the focus ring is 1 pixel off when the stroke is not painted.
 		// Setting the vertical position to middle helps hide this a little, but
 		// it's still a bug.
-		button.putClientProperty(QButtonUI.PROPERTY_VERTICAL_POSITION,
-				VerticalPosition.MIDDLE);
+		button.putClientProperty(QButtonUI.PROPERTY_VERTICAL_POSITION, VerticalPosition.MIDDLE);
 
 		ui.setPaintFocus(PaintFocus.INSIDE);
 		button.setHorizontalAlignment(SwingConstants.LEFT);
@@ -610,12 +586,10 @@ public class CollapsibleContainer extends SectionContainer {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if ((Boolean) button.getClientProperty(COLLAPSIBLE)) {
-					if (e.getKeyCode() == KeyEvent.VK_LEFT
-							|| e.getKeyCode() == KeyEvent.VK_UP) {
+					if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_UP) {
 						button.putClientProperty(COLLAPSED, true);
 						e.consume();
-					} else if (e.getKeyCode() == KeyEvent.VK_RIGHT
-							|| e.getKeyCode() == KeyEvent.VK_DOWN) {
+					} else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_DOWN) {
 						button.putClientProperty(COLLAPSED, false);
 						e.consume();
 					}
@@ -647,16 +621,14 @@ public class CollapsibleContainer extends SectionContainer {
 					if (collapsed) {
 						button.putClientProperty(TARGET_ROTATION, new Double(0));
 					} else {
-						button.putClientProperty(TARGET_ROTATION, new Double(
-								Math.PI / 2.0));
+						button.putClientProperty(TARGET_ROTATION, new Double(Math.PI / 2.0));
 					}
 				} else if (ROTATION.equals(evt.getPropertyName())) {
 					updateIcon();
 				}
 			}
 
-			private Icon triangleIcon = new TriangleIcon(SwingConstants.EAST,
-					10, 10);
+			private Icon triangleIcon = new TriangleIcon(SwingConstants.EAST, 10, 10);
 
 			private void updateIcon() {
 				if ((Boolean) button.getClientProperty(COLLAPSIBLE)) {

@@ -19,8 +19,8 @@ public class LoadableIcon extends ImageIcon {
 	private static final long serialVersionUID = 1L;
 	private File iconFile;
 	private long lastPainted, deletionInterval = 20000;
-	private Image image = null;
 	private final Image clearImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+	private Image image = clearImage;
 	private Timer checkTimer;
 	private int width, height;
 	private TimerTask checkPaintedTask = new TimerTask() {
@@ -32,7 +32,6 @@ public class LoadableIcon extends ImageIcon {
 				image = clearImage;
 				return;
 			}
-			checkTimer.schedule(checkPaintedTask, deletionInterval);
 		}
 
 	};
@@ -67,7 +66,7 @@ public class LoadableIcon extends ImageIcon {
 				image = img;
 			}
 			synchronized (checkTimer) {
-				checkTimer.schedule(checkPaintedTask, deletionInterval);
+				checkTimer.scheduleAtFixedRate(checkPaintedTask, deletionInterval, deletionInterval);
 			}
 		});
 		t.setName("IconLoader");
@@ -104,7 +103,7 @@ public class LoadableIcon extends ImageIcon {
 
 	@Override
 	public void paintIcon(Component c, Graphics g, int x, int y) {
-		if (image == clearImage) {
+		if (image == clearImage || image == null) {
 			loadImage();
 		}
 		synchronized (image) {
