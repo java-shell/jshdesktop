@@ -3,6 +3,11 @@ package jshdesktop.lua;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Map;
@@ -22,28 +27,38 @@ import jshdesktop.lua.image.LuaImageWrapper;
 
 public class LuaComponent extends LuaUserdata {
 	private JComponent internalComp;
-	private LuaInterpreter interp;
+	protected LuaInterpreter interp;
 	private LuaObject paintFunction = null;
+	protected LuaObject eventCallback = null;
+	private _LuaComponentEventListener evListener;
 
 	private static final LuaObject luaComponentMetatable = Lua.newTable();
 
 	public LuaComponent(LuaInterpreter interp) {
 		this.interp = interp;
 		internalComp = new _LuaComponent();
+		evListener = new _LuaComponentEventListener();
+		assignEventHandler();
 		metatable = luaComponentMetatable;
 	}
 
 	public LuaComponent(LuaInterpreter interp, JComponent internalComp) {
 		this.interp = interp;
 		this.internalComp = internalComp;
+		evListener = new _LuaComponentEventListener();
+		assignEventHandler();
 		metatable = luaComponentMetatable;
 	}
 
 	public void setJComponent(JComponent internalComp) {
+		this.internalComp.removeMouseListener(evListener);
+		this.internalComp.removeMouseMotionListener(evListener);
+		this.internalComp.removeKeyListener(evListener);
 		if (internalComp == null)
 			internalComp = new _LuaComponent();
 		else
 			this.internalComp = internalComp;
+		assignEventHandler();
 	}
 
 	@Override
@@ -54,6 +69,12 @@ public class LuaComponent extends LuaUserdata {
 	@Override
 	public String name() {
 		return "LuaComponent";
+	}
+
+	private void assignEventHandler() {
+		internalComp.addMouseListener(evListener);
+		internalComp.addMouseMotionListener(evListener);
+		internalComp.addKeyListener(evListener);
 	}
 
 	private class _LuaComponent extends JComponent {
@@ -545,6 +566,125 @@ public class LuaComponent extends LuaUserdata {
 		}
 	}
 
+	private class _LuaComponentEventListener implements MouseListener, MouseMotionListener, KeyListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if (eventCallback == null)
+				return;
+			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("EventType", "MouseClick");
+			eventTable.rawSet("X", e.getX());
+			eventTable.rawSet("Y", e.getY());
+			eventTable.rawSet("Button", e.getButton());
+			eventCallback.call(interp, eventTable);
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			if (eventCallback == null)
+				return;
+			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("EventType", "MousePress");
+			eventTable.rawSet("X", e.getX());
+			eventTable.rawSet("Y", e.getY());
+			eventTable.rawSet("Button", e.getButton());
+			eventCallback.call(interp, eventTable);
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if (eventCallback == null)
+				return;
+			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("EventType", "MouseRelease");
+			eventTable.rawSet("X", e.getX());
+			eventTable.rawSet("Y", e.getY());
+			eventTable.rawSet("Button", e.getButton());
+			eventCallback.call(interp, eventTable);
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			if (eventCallback == null)
+				return;
+			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("EventType", "MouseEnter");
+			eventTable.rawSet("X", e.getX());
+			eventTable.rawSet("Y", e.getY());
+			eventTable.rawSet("Button", e.getButton());
+			eventCallback.call(interp, eventTable);
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			if (eventCallback == null)
+				return;
+			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("EventType", "MouseExit");
+			eventTable.rawSet("X", e.getX());
+			eventTable.rawSet("Y", e.getY());
+			eventTable.rawSet("Button", e.getButton());
+			eventCallback.call(interp, eventTable);
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			if (eventCallback == null)
+				return;
+			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("EventType", "KeyType");
+			eventTable.rawSet("KeyCode", e.getExtendedKeyCode());
+			eventTable.rawSet("KeyChar", e.getKeyChar());
+			eventCallback.call(interp, eventTable);
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if (eventCallback == null)
+				return;
+			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("EventType", "KeyPress");
+			eventTable.rawSet("KeyCode", e.getExtendedKeyCode());
+			eventCallback.call(interp, eventTable);
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			if (eventCallback == null)
+				return;
+			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("EventType", "KeyRelease");
+			eventTable.rawSet("KeyCode", e.getExtendedKeyCode());
+			eventCallback.call(interp, eventTable);
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			if (eventCallback == null)
+				return;
+			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("EventType", "MouseDrag");
+			eventTable.rawSet("X", e.getX());
+			eventTable.rawSet("Y", e.getY());
+			eventTable.rawSet("Button", e.getButton());
+			eventCallback.call(interp, eventTable);
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			if (eventCallback == null)
+				return;
+			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("EventType", "MouseMove");
+			eventTable.rawSet("X", e.getX());
+			eventTable.rawSet("Y", e.getY());
+			eventTable.rawSet("Button", e.getButton());
+			eventCallback.call(interp, eventTable);
+		}
+
+	}
+
 	static {
 		luaComponentMetatable.rawSet("__name", Lua.newString("COMPONENT"));
 		luaComponentMetatable.rawSet("__index", luaComponentMetatable);
@@ -662,6 +802,80 @@ public class LuaComponent extends LuaUserdata {
 
 		});
 
+		LuaObject setEventHandler = Lua.newFunc(new Consumer<LuaObject[]>() {
+
+			@Override
+			public void accept(LuaObject[] args) {
+				Lua.checkArgs("SetHandler", args, LuaType.USERDATA, LuaType.ANY);
+				LuaComponent lc = (LuaComponent) args[0];
+				if (args[1] == Lua.NIL)
+					lc.eventCallback = null;
+				else
+					lc.eventCallback = args[1];
+			}
+
+		});
+
+		LuaObject setBackgroundColor = Lua.newFunc(new Consumer<LuaObject[]>() {
+
+			@Override
+			public void accept(LuaObject[] args) {
+				Lua.checkArgs("SetBackground", args, LuaType.USERDATA, LuaType.STRING);
+				LuaComponent lc = (LuaComponent) args[0];
+
+				Color newColor = null;
+
+				try {
+					Field colorField = Class.forName("java.awt.Color").getField(args[1].getString());
+					newColor = (Color) colorField.get(null);
+				} catch (Exception e) {
+					return;
+				}
+				lc.internalComp.setBackground(newColor);
+			}
+
+		});
+
+		LuaObject setForegroundColor = Lua.newFunc(new Consumer<LuaObject[]>() {
+			@Override
+			public void accept(LuaObject[] args) {
+				Lua.checkArgs("SetForeground", args, LuaType.USERDATA, LuaType.STRING);
+				LuaComponent lc = (LuaComponent) args[0];
+
+				Color newColor = null;
+
+				try {
+					Field colorField = Class.forName("java.awt.Color").getField(args[1].getString());
+					newColor = (Color) colorField.get(null);
+				} catch (Exception e) {
+					return;
+				}
+				lc.internalComp.setForeground(newColor);
+			}
+		});
+
+		LuaObject getBackgroundColor = Lua.newMethod(new LuaMethod() {
+
+			@Override
+			public LuaObject call(LuaInterpreter arg0, LuaObject[] args) {
+				Lua.checkArgs("GetBackground", args, LuaType.USERDATA);
+				LuaComponent lc = (LuaComponent) args[0];
+				return Lua.newString(lc.internalComp.getBackground().toString());
+			}
+
+		});
+
+		LuaObject getForegroundColor = Lua.newMethod(new LuaMethod() {
+
+			@Override
+			public LuaObject call(LuaInterpreter arg0, LuaObject[] args) {
+				Lua.checkArgs("GetForeground", args, LuaType.USERDATA);
+				LuaComponent lc = (LuaComponent) args[0];
+				return Lua.newString(lc.internalComp.getForeground().toString());
+			}
+
+		});
+
 		luaComponentMetatable.rawSet("SetSize", setSizeFunction);
 		luaComponentMetatable.rawSet("GetSize", getSizeFunction);
 		luaComponentMetatable.rawSet("AddComponent", addLuaComponentFunction);
@@ -671,6 +885,9 @@ public class LuaComponent extends LuaUserdata {
 		luaComponentMetatable.rawSet("Repaint", repaintFunction);
 		luaComponentMetatable.rawSet("SetLocation", setLocationFunction);
 		luaComponentMetatable.rawSet("GetLocation", getLocationFunction);
+		luaComponentMetatable.rawSet("SetHandler", setEventHandler);
+		luaComponentMetatable.rawSet("SetBackground", setBackgroundColor);
+		luaComponentMetatable.rawSet("SetForeground", setForegroundColor);
 	}
 
 }
