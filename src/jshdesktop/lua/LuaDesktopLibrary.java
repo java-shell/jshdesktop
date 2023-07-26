@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Base64;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 import javax.imageio.ImageIO;
@@ -21,7 +24,10 @@ import com.hk.lua.LuaType;
 
 import jshdesktop.com.pump.plaf.PulsingCirclesThrobberUI;
 import jshdesktop.com.pump.plaf.ThrobberUI;
+import jshdesktop.lua.components.LuaCheckBox;
+import jshdesktop.lua.components.LuaComboBox;
 import jshdesktop.lua.components.LuaThrobber;
+import jshdesktop.lua.components.LuaToggleButton;
 import jshdesktop.lua.frame.LuaBasicFrame;
 import jshdesktop.lua.frame.LuaFrame;
 import jshdesktop.lua.image.LuaImageWrapper;
@@ -91,6 +97,31 @@ public enum LuaDesktopLibrary implements BiConsumer<Environment, LuaObject>, Lua
 			return new LuaThrobber(interp);
 		}
 
+	},
+	CreateToggleButton {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			return new LuaToggleButton(interp);
+		}
+	},
+	CreateCheckBox {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			return new LuaCheckBox(interp);
+		}
+	},
+	CreateComboBox {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			Lua.checkArgs("CreateComboBox", args, LuaType.TABLE);
+			final Set<Entry<LuaObject, LuaObject>> entries = args[0].getEntries();
+			String[] newOptions = new String[entries.size()];
+			final Iterator<Entry<LuaObject, LuaObject>> iter = entries.iterator();
+			int i = 0;
+			while (iter.hasNext()) {
+				Entry<LuaObject, LuaObject> entry = iter.next();
+				newOptions[i] = entry.getValue().getString();
+				i++;
+			}
+			return new LuaComboBox(interp, newOptions);
+		}
 	},
 	GetImageFromBase64 {
 		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
