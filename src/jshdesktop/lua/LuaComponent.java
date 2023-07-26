@@ -21,7 +21,7 @@ import com.hk.lua.LuaUserdata;
 import jshdesktop.lua.image.LuaImageWrapper;
 
 public class LuaComponent extends LuaUserdata {
-	private _LuaComponent internalComp;
+	private JComponent internalComp;
 	private LuaInterpreter interp;
 	private LuaObject paintFunction = null;
 
@@ -31,6 +31,19 @@ public class LuaComponent extends LuaUserdata {
 		this.interp = interp;
 		internalComp = new _LuaComponent();
 		metatable = luaComponentMetatable;
+	}
+
+	public LuaComponent(LuaInterpreter interp, JComponent internalComp) {
+		this.interp = interp;
+		this.internalComp = internalComp;
+		metatable = luaComponentMetatable;
+	}
+
+	public void setJComponent(JComponent internalComp) {
+		if (internalComp == null)
+			internalComp = new _LuaComponent();
+		else
+			this.internalComp = internalComp;
 	}
 
 	@Override
@@ -320,8 +333,7 @@ public class LuaComponent extends LuaUserdata {
 
 				@Override
 				public void accept(LuaObject[] args) {
-					Lua.checkArgs("DrawString", args, LuaType.USERDATA, LuaType.ANY, LuaType.INTEGER,
-							LuaType.INTEGER);
+					Lua.checkArgs("DrawString", args, LuaType.USERDATA, LuaType.ANY, LuaType.INTEGER, LuaType.INTEGER);
 
 					LuaGraphicsWrapper lgw = (LuaGraphicsWrapper) args[0];
 					String text = args[1].getString();
@@ -625,6 +637,31 @@ public class LuaComponent extends LuaUserdata {
 
 		});
 
+		LuaObject setLocationFunction = Lua.newFunc(new Consumer<LuaObject[]>() {
+
+			@Override
+			public void accept(LuaObject[] args) {
+				Lua.checkArgs("SetLocation", args, LuaType.USERDATA, LuaType.INTEGER, LuaType.INTEGER);
+				LuaComponent lc = (LuaComponent) args[0];
+				lc.getComponent().setLocation(args[1].getInt(), args[2].getInt());
+			}
+
+		});
+
+		LuaObject getLocationFunction = Lua.newMethod(new LuaMethod() {
+
+			@Override
+			public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+				Lua.checkArgs("GetLocation", args, LuaType.USERDATA);
+				LuaComponent lc = (LuaComponent) args[0];
+				LuaObject positionTable = Lua.newTable();
+				positionTable.rawSet(0, lc.internalComp.getX());
+				positionTable.rawSet(1, lc.internalComp.getY());
+				return positionTable;
+			}
+
+		});
+
 		luaComponentMetatable.rawSet("SetSize", setSizeFunction);
 		luaComponentMetatable.rawSet("GetSize", getSizeFunction);
 		luaComponentMetatable.rawSet("AddComponent", addLuaComponentFunction);
@@ -632,6 +669,8 @@ public class LuaComponent extends LuaUserdata {
 		luaComponentMetatable.rawSet("SetBounds", setBoundsFunction);
 		luaComponentMetatable.rawSet("SetGraphicsEventHandler", setGraphicsEventHandler);
 		luaComponentMetatable.rawSet("Repaint", repaintFunction);
+		luaComponentMetatable.rawSet("SetLocation", setLocationFunction);
+		luaComponentMetatable.rawSet("GetLocation", getLocationFunction);
 	}
 
 }

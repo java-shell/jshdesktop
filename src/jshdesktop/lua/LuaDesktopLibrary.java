@@ -86,9 +86,9 @@ public enum LuaDesktopLibrary implements BiConsumer<Environment, LuaObject>, Lua
 					ui = new PulsingCirclesThrobberUI();
 				}
 
-				return new LuaThrobber(ui, color);
+				return new LuaThrobber(interp, ui, color);
 			}
-			return new LuaThrobber();
+			return new LuaThrobber(interp);
 		}
 
 	},

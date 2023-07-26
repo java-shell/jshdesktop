@@ -2,6 +2,8 @@ package jshdesktop.lua.frame;
 
 import java.util.function.Consumer;
 
+import javax.swing.JLayeredPane;
+
 import com.hk.lua.Lua;
 import com.hk.lua.Lua.LuaMethod;
 import com.hk.lua.LuaInterpreter;
@@ -14,15 +16,18 @@ import jshdesktop.lua.LuaComponent;
 
 public class LuaBasicFrame extends LuaUserdata {
 	private BasicFrame wrappedFrame;
+	private JLayeredPane layeredContentPane;
 	private LuaInterpreter interp;
 	private static final LuaObject luaBasicFrameMetatable = Lua.newTable();
 
 	public LuaBasicFrame(LuaInterpreter interp, LuaComponent contentComponent) {
+		layeredContentPane = new JLayeredPane();
 		wrappedFrame = new BasicFrame() {
 
 			@Override
 			public void create() {
-				this.setContentPane(contentComponent.getComponent());
+				this.setContentPane(layeredContentPane);
+				layeredContentPane.add(contentComponent.getComponent(), JLayeredPane.DEFAULT_LAYER);
 				setSize(contentComponent.getComponent().getSize());
 				finish();
 			}
@@ -92,6 +97,10 @@ public class LuaBasicFrame extends LuaUserdata {
 				LuaBasicFrame lf = (LuaBasicFrame) args[0];
 				LuaComponent toAdd = (LuaComponent) args[1];
 
+				if (args.length == 3 && args[2].type() == LuaType.INTEGER) {
+					lf.layeredContentPane.add(toAdd.getComponent(), args[2].getInt());
+				} else
+					lf.layeredContentPane.add(toAdd.getComponent());
 			}
 
 		});
@@ -103,7 +112,20 @@ public class LuaBasicFrame extends LuaUserdata {
 				Lua.checkArgs("RemoveComponent", args, LuaType.USERDATA, LuaType.USERDATA);
 				LuaBasicFrame lf = (LuaBasicFrame) args[0];
 				LuaComponent toAdd = (LuaComponent) args[1];
-				lf.wrappedFrame.remove(toAdd.getComponent());
+				lf.layeredContentPane.remove(toAdd.getComponent());
+			}
+
+		});
+
+		LuaObject changeComponentLayerFunction = Lua.newFunc(new Consumer<LuaObject[]>() {
+
+			@Override
+			public void accept(LuaObject[] args) {
+				Lua.checkArgs("SetLayer", args, LuaType.USERDATA, LuaType.USERDATA, LuaType.INTEGER);
+				LuaBasicFrame lbf = (LuaBasicFrame) args[0];
+				LuaComponent toMove = (LuaComponent) args[1];
+				int newLayer = args[2].getInt();
+				lbf.layeredContentPane.setLayer(toMove.getComponent(), newLayer);
 			}
 
 		});
@@ -147,6 +169,7 @@ public class LuaBasicFrame extends LuaUserdata {
 		luaBasicFrameMetatable.rawSet("GetSize", getSizeFunction);
 		luaBasicFrameMetatable.rawSet("AddComponent", addLuaComponentFunction);
 		luaBasicFrameMetatable.rawSet("RemoveComponent", removeLuaComponentFunction);
+		luaBasicFrameMetatable.rawSet("SetLayer", changeComponentLayerFunction);
 		luaBasicFrameMetatable.rawSet("SetTitle", setTitleFunction);
 		luaBasicFrameMetatable.rawSet("SetLocation", setLocationFunction);
 		luaBasicFrameMetatable.rawSet("Repaint", repaintFunction);
