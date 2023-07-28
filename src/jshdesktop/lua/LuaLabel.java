@@ -17,6 +17,7 @@ public class LuaLabel extends LuaComponent {
 		super(interp);
 		appendMetatable();
 		label = new JLabel();
+		setJComponent(label);
 	}
 
 	private void appendMetatable() {

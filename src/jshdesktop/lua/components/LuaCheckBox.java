@@ -2,6 +2,9 @@ package jshdesktop.lua.components;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Map.Entry;
 import java.util.function.Consumer;
 
 import javax.swing.Icon;
@@ -32,6 +35,12 @@ public class LuaCheckBox extends LuaComponent {
 				eventCallback.call(interp, eventTable);
 			}
 		});
+		setJComponent(button);
+	}
+	
+	@Override
+	public String name() {
+		return "LuaCheckBox";
 	}
 
 	private void appendMetatable() {
@@ -86,10 +95,22 @@ public class LuaCheckBox extends LuaComponent {
 
 		});
 
-		metatable.rawSet("SetSelected", setSelectedFunction);
-		metatable.rawSet("GetSelected", getSelectedFunction);
-		metatable.rawSet("SetIcon", setIconFunction);
-		metatable.rawSet("SetPressedIcon", setPressedIconFunction);
+		LuaObject newMetatable = Lua.newTable();
+
+		Set<Entry<LuaObject, LuaObject>> entries = metatable.getEntries();
+		Iterator<Entry<LuaObject, LuaObject>> entryIterator = entries.iterator();
+		while (entryIterator.hasNext()) {
+			Entry<LuaObject, LuaObject> entry = entryIterator.next();
+			newMetatable.rawSet(entry.getKey(), entry.getValue());
+		}
+
+		newMetatable.rawSet("SetSelected", setSelectedFunction);
+		newMetatable.rawSet("GetSelected", getSelectedFunction);
+		newMetatable.rawSet("SetIcon", setIconFunction);
+		newMetatable.rawSet("SetPressedIcon", setPressedIconFunction);
+		newMetatable.rawSet("__index", newMetatable);
+		newMetatable.rawSet("__name", "CHECKBOX");
+		metatable = newMetatable;
 	}
 
 }

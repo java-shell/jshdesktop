@@ -123,6 +123,11 @@ public enum LuaDesktopLibrary implements BiConsumer<Environment, LuaObject>, Lua
 			return new LuaComboBox(interp, newOptions);
 		}
 	},
+	CreateLabel {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			return new LuaLabel(interp);
+		}
+	},
 	GetImageFromBase64 {
 		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
 			if (args[0].type() != LuaType.STRING)

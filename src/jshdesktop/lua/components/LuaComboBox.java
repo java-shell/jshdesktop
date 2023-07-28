@@ -38,6 +38,11 @@ public class LuaComboBox extends LuaComponent {
 				eventCallback.call(interp, eventTable);
 			}
 		});
+		setJComponent(comboBox);
+	}
+
+	public String name() {
+		return "LuaComboBox";
 	}
 
 	private void appendMetatable() {
@@ -66,15 +71,27 @@ public class LuaComboBox extends LuaComponent {
 
 			@Override
 			public LuaObject call(LuaInterpreter arg0, LuaObject[] args) {
-				Lua.checkArgs("SetOptions", args, LuaType.USERDATA, LuaType.TABLE);
+				Lua.checkArgs("GetSelected", args, LuaType.USERDATA, LuaType.TABLE);
 				LuaComboBox lcb = (LuaComboBox) args[0];
 				return Lua.newLuaObject((String[]) lcb.comboBox.getSelectedObjects());
 			}
 
 		});
 
-		metatable.rawSet("SetOption", setOptionsFunction);
-		metatable.rawSet("GetSelected", getSelectedOptionsFunction);
+		LuaObject newMetatable = Lua.newTable();
+
+		Set<Entry<LuaObject, LuaObject>> entries = metatable.getEntries();
+		Iterator<Entry<LuaObject, LuaObject>> entryIterator = entries.iterator();
+		while (entryIterator.hasNext()) {
+			Entry<LuaObject, LuaObject> entry = entryIterator.next();
+			newMetatable.rawSet(entry.getKey(), entry.getValue());
+		}
+
+		newMetatable.rawSet("SetOption", setOptionsFunction);
+		newMetatable.rawSet("GetSelected", getSelectedOptionsFunction);
+		newMetatable.rawSet("__index", newMetatable);
+		newMetatable.rawSet("__name", "CHECKBOX");
+		metatable = newMetatable;
 	}
 
 }

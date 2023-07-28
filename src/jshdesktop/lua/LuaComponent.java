@@ -876,6 +876,28 @@ public class LuaComponent extends LuaUserdata {
 
 		});
 
+		LuaObject setVisibilityFunction = Lua.newFunc(new Consumer<LuaObject[]>() {
+
+			@Override
+			public void accept(LuaObject[] args) {
+				Lua.checkArgs("SetVisible", args, LuaType.USERDATA, LuaType.BOOLEAN);
+				LuaComponent lc = (LuaComponent) args[0];
+				lc.internalComp.setVisible(args[1].getBoolean());
+			}
+
+		});
+
+		LuaObject getVisibilityFunction = Lua.newMethod(new LuaMethod() {
+
+			@Override
+			public LuaObject call(LuaInterpreter arg0, LuaObject[] args) {
+				Lua.checkArgs("GetVisible", args, LuaType.USERDATA);
+				LuaComponent lc = (LuaComponent) args[0];
+				return Lua.newBool(lc.internalComp.isVisible());
+			}
+
+		});
+
 		luaComponentMetatable.rawSet("SetSize", setSizeFunction);
 		luaComponentMetatable.rawSet("GetSize", getSizeFunction);
 		luaComponentMetatable.rawSet("AddComponent", addLuaComponentFunction);
@@ -888,6 +910,10 @@ public class LuaComponent extends LuaUserdata {
 		luaComponentMetatable.rawSet("SetHandler", setEventHandler);
 		luaComponentMetatable.rawSet("SetBackground", setBackgroundColor);
 		luaComponentMetatable.rawSet("SetForeground", setForegroundColor);
+		luaComponentMetatable.rawSet("GetForegroundColor", getForegroundColor);
+		luaComponentMetatable.rawSet("GetBackgroundColor", getBackgroundColor);
+		luaComponentMetatable.rawSet("SetVisible", setVisibilityFunction);
+		luaComponentMetatable.rawSet("GetVisible", getVisibilityFunction);
 	}
 
 }
