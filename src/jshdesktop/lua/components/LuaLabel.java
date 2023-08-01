@@ -1,4 +1,4 @@
-package jshdesktop.lua;
+package jshdesktop.lua.components;
 
 import java.util.function.Consumer;
 
@@ -6,6 +6,9 @@ import javax.swing.JLabel;
 
 import com.hk.lua.Lua;
 import com.hk.lua.Lua.LuaMethod;
+
+import jshdesktop.lua.LuaComponent;
+
 import com.hk.lua.LuaInterpreter;
 import com.hk.lua.LuaObject;
 import com.hk.lua.LuaType;

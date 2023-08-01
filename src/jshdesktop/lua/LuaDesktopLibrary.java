@@ -26,10 +26,15 @@ import jshdesktop.com.pump.plaf.PulsingCirclesThrobberUI;
 import jshdesktop.com.pump.plaf.ThrobberUI;
 import jshdesktop.lua.components.LuaCheckBox;
 import jshdesktop.lua.components.LuaComboBox;
+import jshdesktop.lua.components.LuaLabel;
+import jshdesktop.lua.components.LuaPopover;
+import jshdesktop.lua.components.LuaTextArea;
+import jshdesktop.lua.components.LuaTextField;
 import jshdesktop.lua.components.LuaThrobber;
 import jshdesktop.lua.components.LuaToggleButton;
 import jshdesktop.lua.frame.LuaBasicFrame;
 import jshdesktop.lua.frame.LuaFrame;
+import jshdesktop.lua.frame.LuaWidgetFrame;
 import jshdesktop.lua.image.LuaImageWrapper;
 
 public enum LuaDesktopLibrary implements BiConsumer<Environment, LuaObject>, LuaMethod {
@@ -49,6 +54,12 @@ public enum LuaDesktopLibrary implements BiConsumer<Environment, LuaObject>, Lua
 			if (!(args[0] instanceof LuaComponent))
 				Lua.badArgument(0, "CreateBasicFrame", "Expected LuaComponent");
 			return new LuaBasicFrame(interp, (LuaComponent) args[0]);
+		}
+	},
+	CreateWidgetFrame {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			Lua.checkArgs("CreateWidgetFrame", args, LuaType.INTEGER, LuaType.INTEGER, LuaType.BOOLEAN);
+			return new LuaWidgetFrame(interp, args[0].getInt(), args[1].getInt(), args[2].getBoolean());
 		}
 	},
 	CreateThrobber {
@@ -126,6 +137,24 @@ public enum LuaDesktopLibrary implements BiConsumer<Environment, LuaObject>, Lua
 	CreateLabel {
 		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
 			return new LuaLabel(interp);
+		}
+	},
+	CreateTextField {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			return new LuaTextField(interp);
+		}
+	},
+	CreateTextArea {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			return new LuaTextArea(interp);
+		}
+	},
+	AssignPopover {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			Lua.checkArgs("AssignPopover", args, LuaType.USERDATA, LuaType.USERDATA);
+			LuaComponent lcMain = (LuaComponent) args[0];
+			LuaComponent lcPopover = (LuaComponent) args[1];
+			return new LuaPopover(interp, lcMain.getComponent(), lcPopover.getComponent());
 		}
 	},
 	GetImageFromBase64 {

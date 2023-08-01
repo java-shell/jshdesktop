@@ -95,7 +95,7 @@ public class LuaComponent extends LuaUserdata {
 		return internalComp;
 	}
 
-	public class LuaGraphicsWrapper extends LuaUserdata {
+	public static class LuaGraphicsWrapper extends LuaUserdata {
 		private Graphics g;
 		private static final LuaObject luaGraphicsWrapperMetatable = Lua.newTable();
 
@@ -578,6 +578,7 @@ public class LuaComponent extends LuaUserdata {
 			eventTable.rawSet("Y", e.getY());
 			eventTable.rawSet("Button", e.getButton());
 			eventCallback.call(interp, eventTable);
+
 		}
 
 		@Override
@@ -590,6 +591,7 @@ public class LuaComponent extends LuaUserdata {
 			eventTable.rawSet("Y", e.getY());
 			eventTable.rawSet("Button", e.getButton());
 			eventCallback.call(interp, eventTable);
+
 		}
 
 		@Override
@@ -602,6 +604,7 @@ public class LuaComponent extends LuaUserdata {
 			eventTable.rawSet("Y", e.getY());
 			eventTable.rawSet("Button", e.getButton());
 			eventCallback.call(interp, eventTable);
+
 		}
 
 		@Override
@@ -614,6 +617,7 @@ public class LuaComponent extends LuaUserdata {
 			eventTable.rawSet("Y", e.getY());
 			eventTable.rawSet("Button", e.getButton());
 			eventCallback.call(interp, eventTable);
+
 		}
 
 		@Override
@@ -626,6 +630,7 @@ public class LuaComponent extends LuaUserdata {
 			eventTable.rawSet("Y", e.getY());
 			eventTable.rawSet("Button", e.getButton());
 			eventCallback.call(interp, eventTable);
+
 		}
 
 		@Override
@@ -637,6 +642,7 @@ public class LuaComponent extends LuaUserdata {
 			eventTable.rawSet("KeyCode", e.getExtendedKeyCode());
 			eventTable.rawSet("KeyChar", e.getKeyChar());
 			eventCallback.call(interp, eventTable);
+
 		}
 
 		@Override
@@ -647,6 +653,7 @@ public class LuaComponent extends LuaUserdata {
 			eventTable.rawSet("EventType", "KeyPress");
 			eventTable.rawSet("KeyCode", e.getExtendedKeyCode());
 			eventCallback.call(interp, eventTable);
+
 		}
 
 		@Override
@@ -657,6 +664,7 @@ public class LuaComponent extends LuaUserdata {
 			eventTable.rawSet("EventType", "KeyRelease");
 			eventTable.rawSet("KeyCode", e.getExtendedKeyCode());
 			eventCallback.call(interp, eventTable);
+
 		}
 
 		@Override
@@ -665,10 +673,11 @@ public class LuaComponent extends LuaUserdata {
 				return;
 			LuaObject eventTable = Lua.newTable();
 			eventTable.rawSet("EventType", "MouseDrag");
-			eventTable.rawSet("X", e.getX());
-			eventTable.rawSet("Y", e.getY());
+			eventTable.rawSet("X", e.getPoint().x);
+			eventTable.rawSet("Y", e.getPoint().y);
 			eventTable.rawSet("Button", e.getButton());
 			eventCallback.call(interp, eventTable);
+
 		}
 
 		@Override
@@ -681,6 +690,7 @@ public class LuaComponent extends LuaUserdata {
 			eventTable.rawSet("Y", e.getY());
 			eventTable.rawSet("Button", e.getButton());
 			eventCallback.call(interp, eventTable);
+
 		}
 
 	}
