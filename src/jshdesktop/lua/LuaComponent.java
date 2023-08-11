@@ -1,8 +1,10 @@
 package jshdesktop.lua;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.IllegalComponentStateException;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -10,10 +12,15 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.lang.reflect.Field;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import javax.accessibility.Accessible;
+import javax.accessibility.AccessibleContext;
+import javax.accessibility.AccessibleRole;
+import javax.accessibility.AccessibleStateSet;
 import javax.swing.JComponent;
 
 import com.hk.lua.Lua;
@@ -27,10 +34,12 @@ import jshdesktop.lua.image.LuaImageWrapper;
 
 public class LuaComponent extends LuaUserdata {
 	private JComponent internalComp;
+	private LuaComponent reference;
 	protected LuaInterpreter interp;
 	private LuaObject paintFunction = null;
 	protected LuaObject eventCallback = null;
 	private _LuaComponentEventListener evListener;
+	private _LuaAccessibleContext context;
 
 	private static final LuaObject luaComponentMetatable = Lua.newTable();
 
@@ -40,6 +49,8 @@ public class LuaComponent extends LuaUserdata {
 		evListener = new _LuaComponentEventListener();
 		assignEventHandler();
 		metatable = luaComponentMetatable;
+		context = new _LuaAccessibleContext();
+		reference = this;
 	}
 
 	public LuaComponent(LuaInterpreter interp, JComponent internalComp) {
@@ -48,6 +59,8 @@ public class LuaComponent extends LuaUserdata {
 		evListener = new _LuaComponentEventListener();
 		assignEventHandler();
 		metatable = luaComponentMetatable;
+		context = new _LuaAccessibleContext();
+		reference = this;
 	}
 
 	public void setJComponent(JComponent internalComp) {
@@ -77,6 +90,39 @@ public class LuaComponent extends LuaUserdata {
 		internalComp.addKeyListener(evListener);
 	}
 
+	private class _LuaAccessibleContext extends AccessibleContext {
+		@Override
+		public AccessibleRole getAccessibleRole() {
+			return AccessibleRole.PANEL;
+		}
+
+		@Override
+		public AccessibleStateSet getAccessibleStateSet() {
+			return new AccessibleStateSet();
+		}
+
+		@Override
+		public int getAccessibleIndexInParent() {
+			return 0;
+		}
+
+		@Override
+		public int getAccessibleChildrenCount() {
+			return 0;
+		}
+
+		@Override
+		public Accessible getAccessibleChild(int i) {
+			return null;
+		}
+
+		@Override
+		public Locale getLocale() throws IllegalComponentStateException {
+			return Locale.US;
+		}
+
+	}
+
 	private class _LuaComponent extends JComponent {
 
 		private static final long serialVersionUID = -8757032357422851131L;
@@ -87,6 +133,11 @@ public class LuaComponent extends LuaUserdata {
 				LuaGraphicsWrapper lgw = new LuaGraphicsWrapper(g);
 				paintFunction.call(interp, lgw);
 			}
+		}
+
+		@Override
+		public AccessibleContext getAccessibleContext() {
+			return context;
 		}
 
 	}
@@ -573,6 +624,7 @@ public class LuaComponent extends LuaUserdata {
 			if (eventCallback == null)
 				return;
 			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("Source", reference);
 			eventTable.rawSet("EventType", "MouseClick");
 			eventTable.rawSet("X", e.getX());
 			eventTable.rawSet("Y", e.getY());
@@ -586,6 +638,7 @@ public class LuaComponent extends LuaUserdata {
 			if (eventCallback == null)
 				return;
 			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("Source", reference);
 			eventTable.rawSet("EventType", "MousePress");
 			eventTable.rawSet("X", e.getX());
 			eventTable.rawSet("Y", e.getY());
@@ -599,6 +652,7 @@ public class LuaComponent extends LuaUserdata {
 			if (eventCallback == null)
 				return;
 			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("Source", reference);
 			eventTable.rawSet("EventType", "MouseRelease");
 			eventTable.rawSet("X", e.getX());
 			eventTable.rawSet("Y", e.getY());
@@ -612,6 +666,7 @@ public class LuaComponent extends LuaUserdata {
 			if (eventCallback == null)
 				return;
 			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("Source", reference);
 			eventTable.rawSet("EventType", "MouseEnter");
 			eventTable.rawSet("X", e.getX());
 			eventTable.rawSet("Y", e.getY());
@@ -625,6 +680,7 @@ public class LuaComponent extends LuaUserdata {
 			if (eventCallback == null)
 				return;
 			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("Source", reference);
 			eventTable.rawSet("EventType", "MouseExit");
 			eventTable.rawSet("X", e.getX());
 			eventTable.rawSet("Y", e.getY());
@@ -638,6 +694,7 @@ public class LuaComponent extends LuaUserdata {
 			if (eventCallback == null)
 				return;
 			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("Source", reference);
 			eventTable.rawSet("EventType", "KeyType");
 			eventTable.rawSet("KeyCode", e.getExtendedKeyCode());
 			eventTable.rawSet("KeyChar", e.getKeyChar());
@@ -650,6 +707,7 @@ public class LuaComponent extends LuaUserdata {
 			if (eventCallback == null)
 				return;
 			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("Source", reference);
 			eventTable.rawSet("EventType", "KeyPress");
 			eventTable.rawSet("KeyCode", e.getExtendedKeyCode());
 			eventCallback.call(interp, eventTable);
@@ -661,6 +719,7 @@ public class LuaComponent extends LuaUserdata {
 			if (eventCallback == null)
 				return;
 			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("Source", reference);
 			eventTable.rawSet("EventType", "KeyRelease");
 			eventTable.rawSet("KeyCode", e.getExtendedKeyCode());
 			eventCallback.call(interp, eventTable);
@@ -672,6 +731,7 @@ public class LuaComponent extends LuaUserdata {
 			if (eventCallback == null)
 				return;
 			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("Source", reference);
 			eventTable.rawSet("EventType", "MouseDrag");
 			eventTable.rawSet("X", e.getPoint().x);
 			eventTable.rawSet("Y", e.getPoint().y);
@@ -685,6 +745,7 @@ public class LuaComponent extends LuaUserdata {
 			if (eventCallback == null)
 				return;
 			LuaObject eventTable = Lua.newTable();
+			eventTable.rawSet("Source", reference);
 			eventTable.rawSet("EventType", "MouseMove");
 			eventTable.rawSet("X", e.getX());
 			eventTable.rawSet("Y", e.getY());
@@ -908,6 +969,28 @@ public class LuaComponent extends LuaUserdata {
 
 		});
 
+		LuaObject setPreferredSizeFunction = Lua.newFunc(new Consumer<LuaObject[]>() {
+			public void accept(LuaObject[] args) {
+				Lua.checkArgs("SetPreferredSize", args, LuaType.USERDATA, LuaType.INTEGER, LuaType.INTEGER);
+				LuaComponent lc = (LuaComponent) args[0];
+				lc.internalComp.setPreferredSize(new Dimension(args[1].getInt(), args[2].getInt()));
+			}
+		});
+
+		LuaObject getPreferredSizeFunction = Lua.newMethod(new LuaMethod() {
+			public LuaObject call(LuaInterpreter arg0, LuaObject[] args) {
+				Lua.checkArgs("GetPreferredSize", args, LuaType.USERDATA);
+				LuaComponent lc = (LuaComponent) args[0];
+
+				Dimension preferredSize = lc.internalComp.getPreferredSize();
+
+				LuaObject dimensionTable = Lua.newTable();
+				dimensionTable.rawSet(0, preferredSize.getWidth());
+				dimensionTable.rawSet(1, preferredSize.getHeight());
+				return dimensionTable;
+			}
+		});
+
 		luaComponentMetatable.rawSet("SetSize", setSizeFunction);
 		luaComponentMetatable.rawSet("GetSize", getSizeFunction);
 		luaComponentMetatable.rawSet("AddComponent", addLuaComponentFunction);
@@ -924,6 +1007,8 @@ public class LuaComponent extends LuaUserdata {
 		luaComponentMetatable.rawSet("GetBackgroundColor", getBackgroundColor);
 		luaComponentMetatable.rawSet("SetVisible", setVisibilityFunction);
 		luaComponentMetatable.rawSet("GetVisible", getVisibilityFunction);
+		luaComponentMetatable.rawSet("SetPreferredSize", setPreferredSizeFunction);
+		luaComponentMetatable.rawSet("GetPreferredSize", getPreferredSizeFunction);
 	}
 
 }

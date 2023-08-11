@@ -30,7 +30,8 @@ public class LuaWidgetFrame extends LuaUserdata {
 
 			@Override
 			public void paintComponent(Graphics g) {
-				paintFunction.call(interp, new LuaGraphicsWrapper(g));
+				if (paintFunction != null)
+					paintFunction.call(interp, new LuaGraphicsWrapper(g));
 			}
 
 		};

@@ -14,12 +14,11 @@ import jshdesktop.com.pump.swing.popover.BasicPopoverVisibility;
 import jshdesktop.com.pump.swing.popover.JPopover;
 
 public class LuaPopover extends LuaUserdata {
-	private JPopover popover;
+	private JPopover<JComponent> popover;
 	private static final LuaObject luaPopoverMetatable = Lua.newTable();
 
 	public LuaPopover(LuaInterpreter interp, JComponent internalComp, JComponent popoverComp) {
 		popover = new JPopover<JComponent>(internalComp, popoverComp, true);
-		popover.setVisibility(new BasicPopoverVisibility());
 		metatable = luaPopoverMetatable;
 	}
 
