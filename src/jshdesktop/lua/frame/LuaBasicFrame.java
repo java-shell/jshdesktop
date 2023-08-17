@@ -36,6 +36,10 @@ public class LuaBasicFrame extends LuaUserdata {
 		metatable = luaBasicFrameMetatable;
 	}
 
+	public BasicFrame getBasicFrame() {
+		return wrappedFrame;
+	}
+
 	static {
 		luaBasicFrameMetatable.rawSet("__name", "FRAME");
 		luaBasicFrameMetatable.rawSet("__index", luaBasicFrameMetatable);

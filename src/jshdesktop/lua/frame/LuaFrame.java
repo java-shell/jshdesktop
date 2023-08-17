@@ -40,6 +40,10 @@ public class LuaFrame extends LuaUserdata {
 		return "FRAME";
 	}
 
+	public JFrame getFrame() {
+		return wrappedFrame;
+	}
+
 	static {
 		luaFrameMetatable.rawSet("__name", "FRAME");
 		luaFrameMetatable.rawSet("__index", luaFrameMetatable);

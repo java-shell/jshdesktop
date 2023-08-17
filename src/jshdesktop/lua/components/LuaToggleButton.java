@@ -3,8 +3,8 @@ package jshdesktop.lua.components;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import javax.swing.Icon;
@@ -114,6 +114,25 @@ public class LuaToggleButton extends LuaComponent {
 
 		});
 
+		LuaObject setTextFunction = Lua.newFunc(new Consumer<LuaObject[]>() {
+			public void accept(LuaObject[] args) {
+				Lua.checkArgs("SetText", args, LuaType.USERDATA, LuaType.STRING);
+				LuaToggleButton ltb = (LuaToggleButton) args[0];
+				ltb.button.setText(args[1].getString());
+			}
+		});
+
+		LuaObject getTextFunction = Lua.newMethod(new LuaMethod() {
+
+			@Override
+			public LuaObject call(LuaInterpreter arg0, LuaObject[] args) {
+				Lua.checkArgs("GetText", args, LuaType.USERDATA);
+				LuaToggleButton ltb = (LuaToggleButton) args[0];
+				return Lua.newString(ltb.button.getText());
+			}
+
+		});
+
 		LuaObject newMetatable = Lua.newTable();
 
 		Set<Entry<LuaObject, LuaObject>> entries = metatable.getEntries();
@@ -127,6 +146,8 @@ public class LuaToggleButton extends LuaComponent {
 		newMetatable.rawSet("GetSelected", getSelectedFunction);
 		newMetatable.rawSet("SetIcon", setIconFunction);
 		newMetatable.rawSet("SetPressedIcon", setPressedIconFunction);
+		newMetatable.rawSet("SetText", setTextFunction);
+		newMetatable.rawSet("GetText", getTextFunction);
 		newMetatable.rawSet("__index", newMetatable);
 		newMetatable.rawSet("__name", "TOGGLEBUTTON");
 		metatable = newMetatable;
