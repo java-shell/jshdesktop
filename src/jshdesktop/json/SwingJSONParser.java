@@ -4,7 +4,10 @@ import java.awt.Component;
 import java.util.Hashtable;
 import java.util.UUID;
 
+import javax.swing.AbstractButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.text.JTextComponent;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -51,6 +54,18 @@ public class SwingJSONParser {
 			JSONObject[] descriptors = new JSONObject[components.length];
 			for (int i = 0; i < components.length; i++) {
 				descriptors[i] = convertToJSON(components[i], compIds);
+			}
+
+			if (jcomp instanceof AbstractButton) {
+				extendedDataTable.put("Text", ((AbstractButton) jcomp).getText());
+			}
+
+			if (jcomp instanceof JLabel) {
+				extendedDataTable.put("Text", ((JLabel) jcomp).getText());
+			}
+
+			if (jcomp instanceof JTextComponent) {
+				extendedDataTable.put("Text", ((JTextComponent) jcomp).getText());
 			}
 
 			compHeader.put("subcomps", descriptors);
