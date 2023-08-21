@@ -57,15 +57,15 @@ public class SwingJSONParser {
 			}
 
 			if (jcomp instanceof AbstractButton) {
-				extendedDataTable.put("Text", ((AbstractButton) jcomp).getText());
+				extendedDataTable.put("text", ((AbstractButton) jcomp).getText());
 			}
 
 			if (jcomp instanceof JLabel) {
-				extendedDataTable.put("Text", ((JLabel) jcomp).getText());
+				extendedDataTable.put("text", ((JLabel) jcomp).getText());
 			}
 
 			if (jcomp instanceof JTextComponent) {
-				extendedDataTable.put("Text", ((JTextComponent) jcomp).getText());
+				extendedDataTable.put("text", ((JTextComponent) jcomp).getText());
 			}
 
 			compHeader.put("subcomps", descriptors);
