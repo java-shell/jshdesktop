@@ -17,6 +17,9 @@ import java.util.UUID;
 import java.util.function.BiConsumer;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
 
 import org.json.simple.JSONObject;
 
@@ -30,6 +33,7 @@ import com.hk.lua.LuaType;
 import jshdesktop.com.pump.plaf.PulsingCirclesThrobberUI;
 import jshdesktop.com.pump.plaf.ThrobberUI;
 import jshdesktop.json.SwingJSONParser;
+import jshdesktop.lua.components.LuaBorder;
 import jshdesktop.lua.components.LuaCheckBox;
 import jshdesktop.lua.components.LuaComboBox;
 import jshdesktop.lua.components.LuaLabel;
@@ -154,6 +158,41 @@ public enum LuaDesktopLibrary implements BiConsumer<Environment, LuaObject>, Lua
 	CreateTextArea {
 		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
 			return new LuaTextArea(interp);
+		}
+	},
+	CreateLineBorder {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			Lua.checkArgs("CreateLineBorder", args, LuaType.STRING);
+
+			Color color = null;
+			try {
+				Field colorField = Class.forName("java.awt.Color").getField(args[0].getString());
+				color = (Color) colorField.get(null);
+			} catch (Exception e) {
+				color = Color.BLACK;
+			}
+
+			return new LuaBorder(BorderFactory.createLineBorder(color));
+		}
+	},
+	CreateLoweredEtchedBorder {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			return new LuaBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		}
+	},
+	CreateRaisedEtchedBorder {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			return new LuaBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+		}
+	},
+	CreateLoweredBevelBorder {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			return new LuaBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+		}
+	},
+	CreateRaisedBevelBorder {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			return new LuaBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 		}
 	},
 	AssignPopover {

@@ -30,6 +30,7 @@ import com.hk.lua.LuaObject;
 import com.hk.lua.LuaType;
 import com.hk.lua.LuaUserdata;
 
+import jshdesktop.lua.components.LuaBorder;
 import jshdesktop.lua.image.LuaImageWrapper;
 
 public class LuaComponent extends LuaUserdata {
@@ -991,6 +992,21 @@ public class LuaComponent extends LuaUserdata {
 			}
 		});
 
+		LuaObject setBorderFunction = Lua.newFunc(new Consumer<LuaObject[]>() {
+			public void accept(LuaObject[] args) {
+				Lua.checkArgs("SetBorder", args, LuaType.USERDATA, LuaType.USERDATA);
+				LuaComponent lc = (LuaComponent) args[0];
+				if (args[1] == Lua.NIL) {
+					lc.internalComp.setBorder(null);
+					return;
+				}
+				if (!(args[1] instanceof LuaBorder))
+					Lua.badArgument(1, "SetBorder", "Expected BORDER");
+				LuaBorder lb = (LuaBorder) args[1];
+				lc.internalComp.setBorder(lb.getBorder());
+			}
+		});
+
 		luaComponentMetatable.rawSet("SetSize", setSizeFunction);
 		luaComponentMetatable.rawSet("GetSize", getSizeFunction);
 		luaComponentMetatable.rawSet("AddComponent", addLuaComponentFunction);
@@ -1009,6 +1025,7 @@ public class LuaComponent extends LuaUserdata {
 		luaComponentMetatable.rawSet("GetVisible", getVisibilityFunction);
 		luaComponentMetatable.rawSet("SetPreferredSize", setPreferredSizeFunction);
 		luaComponentMetatable.rawSet("GetPreferredSize", getPreferredSizeFunction);
+		luaComponentMetatable.rawSet("SetBorder", setBorderFunction);
 	}
 
 }

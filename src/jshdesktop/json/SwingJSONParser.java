@@ -1,12 +1,17 @@
 package jshdesktop.json;
 
 import java.awt.Component;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Base64;
 import java.util.Hashtable;
 import java.util.UUID;
 
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
 
 import org.json.simple.JSONObject;
@@ -66,6 +71,25 @@ public class SwingJSONParser {
 
 			if (jcomp instanceof JTextComponent) {
 				extendedDataTable.put("text", ((JTextComponent) jcomp).getText());
+			}
+
+			try {
+				Border border = jcomp.getBorder();
+
+				if (border == null) {
+					extendedDataTable.put("border", null);
+				} else if (border instanceof Serializable) {
+					ByteArrayOutputStream bout = new ByteArrayOutputStream();
+					ObjectOutputStream objOut = new ObjectOutputStream(bout);
+					objOut.writeObject(border);
+					bout.flush();
+					bout.close();
+
+					String borderString = Base64.getEncoder().encodeToString(bout.toByteArray());
+
+					extendedDataTable.put("border", borderString);
+				}
+			} catch (Exception e) {
 			}
 
 			compHeader.put("subcomps", descriptors);
