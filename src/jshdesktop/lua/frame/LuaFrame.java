@@ -1,5 +1,6 @@
 package jshdesktop.lua.frame;
 
+import java.io.Serializable;
 import java.util.function.Consumer;
 
 import javax.swing.JFrame;
@@ -13,7 +14,7 @@ import com.hk.lua.LuaUserdata;
 
 import jshdesktop.lua.LuaComponent;
 
-public class LuaFrame extends LuaUserdata {
+public class LuaFrame extends LuaUserdata implements Serializable {
 	private JFrame wrappedFrame;
 	private LuaInterpreter interp;
 	private static final LuaObject luaFrameMetatable = Lua.newTable();

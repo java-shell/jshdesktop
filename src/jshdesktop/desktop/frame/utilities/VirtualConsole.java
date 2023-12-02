@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -29,6 +31,7 @@ import terra.shell.command.Terminal;
 import terra.shell.launch.Launch;
 import terra.shell.logging.LogManager;
 import terra.shell.logging.Logger;
+import terra.shell.utils.system.user.User;
 
 public class VirtualConsole extends BasicFrame {
 	private Hashtable<String, Command> cmds;
@@ -36,12 +39,66 @@ public class VirtualConsole extends BasicFrame {
 	private static Terminal t;
 	private static EmulatedOutputStream eOut;
 	private static Logger log = LogManager.getLogger("VirtualConsole");
+	private User user;
 
 	public VirtualConsole() {
 		setTitle("vterm");
+	}
+
+	@Override
+	public void create() {
+		new AuthenticatorPopup(new Action() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setUser((User) e.getSource());
+				finalizeCreate();
+			}
+
+			@Override
+			public Object getValue(String key) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public void putValue(String key, Object value) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void setEnabled(boolean b) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public boolean isEnabled() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public void addPropertyChangeListener(PropertyChangeListener listener) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void removePropertyChangeListener(PropertyChangeListener listener) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+	}
+
+	private void finalizeCreate() {
+
 		Thread th = new Thread(new Runnable() {
 			public void run() {
-				t = new Terminal();
+				t = new Terminal(user);
 				eOut = new EmulatedOutputStream();
 				t.setGOutputStream(eOut);
 				t.setOutputStream(eOut);
@@ -71,12 +128,7 @@ public class VirtualConsole extends BasicFrame {
 			e.printStackTrace();
 		}
 		outMon.start();
-	}
 
-	private boolean isDone = false;
-
-	@Override
-	public void create() {
 		cmds = Launch.getCmds();
 		JPanel mainPanel = new JPanel();
 		JPanel inputPanel = new JPanel();
@@ -114,7 +166,6 @@ public class VirtualConsole extends BasicFrame {
 				if (cmds.get(cmd).isBlocking()) {
 					Thread th = new Thread(() -> {
 						t.runCmd(cmd, commandArgs);
-						isDone = true;
 					});
 					th.start();
 				}
@@ -139,6 +190,7 @@ public class VirtualConsole extends BasicFrame {
 
 		add(mainPanel);
 		setSize(500, 500);
+		outPut.append("Loaded " + cmds.size() + " commands");
 		finish();
 	}
 
@@ -183,6 +235,10 @@ public class VirtualConsole extends BasicFrame {
 			return out;
 		}
 
+	}
+
+	private void setUser(User user) {
+		this.user = user;
 	}
 
 	private class BlockingInputStream extends InputStream {

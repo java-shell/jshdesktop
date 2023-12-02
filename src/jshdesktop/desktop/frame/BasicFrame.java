@@ -26,7 +26,8 @@ public abstract class BasicFrame extends JInternalFrame implements JProcessCompo
 		setResizable(true);
 		setClosable(true);
 		setIconifiable(true);
-		module.getDesktopFrame().add(this);
+		module.addToDesktopFrame(this);
+		// module.getDesktopFrame().add(this);
 		toFront();
 	}
 

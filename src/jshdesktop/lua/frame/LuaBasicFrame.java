@@ -1,5 +1,6 @@
 package jshdesktop.lua.frame;
 
+import java.io.Serializable;
 import java.util.function.Consumer;
 
 import javax.swing.JLayeredPane;
@@ -14,7 +15,7 @@ import com.hk.lua.LuaUserdata;
 import jshdesktop.desktop.frame.BasicFrame;
 import jshdesktop.lua.LuaComponent;
 
-public class LuaBasicFrame extends LuaUserdata {
+public class LuaBasicFrame extends LuaUserdata implements Serializable {
 	private BasicFrame wrappedFrame;
 	private JLayeredPane layeredContentPane;
 	private LuaInterpreter interp;
@@ -33,6 +34,11 @@ public class LuaBasicFrame extends LuaUserdata {
 			}
 
 		};
+		metatable = luaBasicFrameMetatable;
+	}
+
+	public LuaBasicFrame(LuaInterpreter interp, BasicFrame frame) {
+		wrappedFrame = frame;
 		metatable = luaBasicFrameMetatable;
 	}
 

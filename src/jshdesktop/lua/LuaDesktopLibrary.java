@@ -5,7 +5,10 @@ import java.awt.Component;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Base64;
@@ -18,10 +21,12 @@ import java.util.function.BiConsumer;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import com.hk.lua.Environment;
 import com.hk.lua.Lua;
@@ -241,6 +246,25 @@ public enum LuaDesktopLibrary implements BiConsumer<Environment, LuaObject>, Lua
 			return dimensionTable;
 		}
 	},
+	ConvertJSONToComponent {
+		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
+			Lua.checkArgs("ConvertJSONToComponent", args, LuaType.STRING);
+			String jsonPath = args[0].getString();
+			File jsonFile = new File(jsonPath);
+
+			JSONParser parser = new JSONParser();
+
+			try {
+				Reader in = new FileReader(jsonFile);
+				JSONObject json = (JSONObject) parser.parse(in);
+				JComponent comp = SwingJSONParser.parseComponent(json);
+				return Lua.newString(comp.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return Lua.NIL;
+		}
+	},
 	ConvertComponentToJSON {
 		public LuaObject call(LuaInterpreter interp, LuaObject[] args) {
 			Lua.checkArgs("ConvertComponentToJSON", args, LuaType.USERDATA);
@@ -248,47 +272,25 @@ public enum LuaDesktopLibrary implements BiConsumer<Environment, LuaObject>, Lua
 					|| (args[0] instanceof LuaFrame))) {
 				throw Lua.badArgument(0, "ConvertComponentToJSON", "LuaComponent expected");
 			}
-			Hashtable<Component, UUID> compIds = null;
+			Hashtable<Object, UUID> compIds = null;
 
 			if (args.length > 1) {
-				compIds = new Hashtable<Component, UUID>();
+				compIds = new Hashtable<Object, UUID>();
 				Set<Entry<LuaObject, LuaObject>> entries = args[1].getEntries();
 				for (Entry<LuaObject, LuaObject> e : entries) {
 					LuaObject compObj = e.getKey();
-					Component comp = null;
 					LuaObject uuidObj = e.getValue();
 					UUID uuid;
 					if (!(uuidObj instanceof LuaUUID))
 						continue;
 					uuid = ((LuaUUID) uuidObj).getUUID();
 
-					if (compObj instanceof LuaComponent) {
-						comp = ((LuaComponent) compObj).getComponent();
-					}
-					if (compObj instanceof LuaBasicFrame) {
-						comp = ((LuaBasicFrame) compObj).getBasicFrame();
-					}
-					if (compObj instanceof LuaFrame) {
-						comp = ((LuaFrame) compObj).getFrame();
-					}
-					if (comp == null)
+					if (compObj == null)
 						continue;
-					compIds.put(comp, uuid);
+					compIds.put(compObj, uuid);
 				}
 			}
-			JSONObject json = null;
-			if (args[0] instanceof LuaComponent) {
-				LuaComponent lc = (LuaComponent) args[0];
-				json = SwingJSONParser.convertToJSON(lc.getComponent(), compIds);
-			}
-			if (args[0] instanceof LuaBasicFrame) {
-				LuaBasicFrame lbf = (LuaBasicFrame) args[0];
-				json = SwingJSONParser.convertToJSON(lbf.getBasicFrame(), compIds);
-			}
-			if (args[0] instanceof LuaFrame) {
-				LuaFrame lf = (LuaFrame) args[0];
-				json = SwingJSONParser.convertToJSON(lf.getFrame(), compIds);
-			}
+			JSONObject json = SwingJSONParser.convertToJSON(args[0], compIds);
 			return Lua.newString(json.toJSONString());
 		}
 

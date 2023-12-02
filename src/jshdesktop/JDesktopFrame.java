@@ -7,6 +7,7 @@ import java.awt.GraphicsEnvironment;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 
 import jshdesktop.desktop.DecoratedDesktopPane;
 import jshdesktop.desktop.menu.DesktopMenuBar;
@@ -16,26 +17,59 @@ import terra.shell.logging.Logger;
 import terra.shell.utils.system.EventManager;
 
 public class JDesktopFrame extends JFrame {
-	private Logger log = LogManager.getLogger("DesktopFrame");
-	private DecoratedDesktopPane desktopPane;
-	private DesktopMenuBar menuBar;
-	private JFrame splashFrame;
+	private static Logger log = LogManager.getLogger("DesktopFrame");
+	private final DecoratedDesktopPane desktopPane = new DecoratedDesktopPane();
+	private static DesktopMenuBar menuBar;
+	private final JDesktopFrame thisFrame = this;
+	private static volatile boolean isAlreadyInitialized = false;
+	private final module m;
+	private static Thread monitorAddThread;
 
-	public JDesktopFrame(JFrame splashFrame) {
+	public JDesktopFrame(module m) {
+		this.m = m;
+	}
+
+	public void init() {
+		if (isAlreadyInitialized) {
+			return;
+		}
+		isAlreadyInitialized = true;
+
 		log.debug("Creating JDesktopFrame top level...");
-		this.splashFrame = splashFrame;
-		desktopPane = new DecoratedDesktopPane();
 		this.setUndecorated(true);
 		super.add(desktopPane);
 		setSize(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width,
 				GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height);
 		menuBar = desktopPane.getMenuBar();
 		super.add(menuBar, BorderLayout.SOUTH);
-		if (splashFrame != null)
-			splashFrame.setVisible(false);
-		splashFrame = null;
 		setVisible(true);
+
 		EventManager.invokeEvent(new InitCompletionEvent(null));
+
+		monitorAddThread = new Thread(new Runnable() {
+			public void run() {
+				synchronized (monitorAddThread) {
+					while (thisFrame.isVisible()) {
+						try {
+							monitorAddThread.wait();
+							JInternalFrame toAdd = module.toAdd.poll();
+							if (toAdd != null) {
+								add(toAdd);
+							} else {
+								log.debug("Received null component");
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+		monitorAddThread.start();
+	}
+
+	public Thread getMonitorThread() {
+		return monitorAddThread;
 	}
 
 	@Override

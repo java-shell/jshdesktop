@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Locale;
@@ -33,7 +34,7 @@ import com.hk.lua.LuaUserdata;
 import jshdesktop.lua.components.LuaBorder;
 import jshdesktop.lua.image.LuaImageWrapper;
 
-public class LuaComponent extends LuaUserdata {
+public class LuaComponent extends LuaUserdata implements Serializable {
 	private JComponent internalComp;
 	private LuaComponent reference;
 	protected LuaInterpreter interp;
@@ -91,7 +92,7 @@ public class LuaComponent extends LuaUserdata {
 		internalComp.addKeyListener(evListener);
 	}
 
-	private class _LuaAccessibleContext extends AccessibleContext {
+	private class _LuaAccessibleContext extends AccessibleContext implements Serializable {
 		@Override
 		public AccessibleRole getAccessibleRole() {
 			return AccessibleRole.PANEL;
@@ -124,9 +125,12 @@ public class LuaComponent extends LuaUserdata {
 
 	}
 
-	private class _LuaComponent extends JComponent {
+	public class _LuaComponent extends JComponent {
 
 		private static final long serialVersionUID = -8757032357422851131L;
+
+		public _LuaComponent() {
+		}
 
 		@Override
 		public void paintComponent(Graphics g) {
@@ -147,7 +151,7 @@ public class LuaComponent extends LuaUserdata {
 		return internalComp;
 	}
 
-	public static class LuaGraphicsWrapper extends LuaUserdata {
+	public static class LuaGraphicsWrapper extends LuaUserdata implements Serializable {
 		private Graphics g;
 		private static final LuaObject luaGraphicsWrapperMetatable = Lua.newTable();
 
@@ -618,7 +622,7 @@ public class LuaComponent extends LuaUserdata {
 		}
 	}
 
-	private class _LuaComponentEventListener implements MouseListener, MouseMotionListener, KeyListener {
+	private class _LuaComponentEventListener implements MouseListener, MouseMotionListener, KeyListener, Serializable {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
