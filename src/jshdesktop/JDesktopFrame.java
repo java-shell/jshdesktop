@@ -44,7 +44,7 @@ public class JDesktopFrame extends JFrame {
 		super.add(menuBar, BorderLayout.SOUTH);
 		setVisible(true);
 
-		EventManager.invokeEvent(new InitCompletionEvent(null));
+		EventManager.invokeEvent(new InitCompletionEvent(new Object[] { this }));
 
 		monitorAddThread = new Thread(new Runnable() {
 			public void run() {

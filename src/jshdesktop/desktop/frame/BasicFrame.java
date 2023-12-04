@@ -4,17 +4,27 @@ import javax.swing.JInternalFrame;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
+import jshdesktop.JDesktopFrame;
 import jshdesktop.module;
 import terra.shell.utils.system.JSHProcesses;
 
 public abstract class BasicFrame extends JInternalFrame implements JProcessComponent {
 	private JGuiProcess local;
+	private JDesktopFrame mainFrame = null;
 
 	public BasicFrame() {
 		setName("BasicFrame");
 		this.local = new JGuiProcess(this);
 		local.run();
 		JSHProcesses.addProcess(local);
+	}
+
+	public BasicFrame(JDesktopFrame mainFrame) {
+		setName("BasicFrame");
+		this.local = new JGuiProcess(this);
+		local.run();
+		JSHProcesses.addProcess(local);
+		this.mainFrame = mainFrame;
 	}
 
 	public String getName() {
@@ -26,7 +36,10 @@ public abstract class BasicFrame extends JInternalFrame implements JProcessCompo
 		setResizable(true);
 		setClosable(true);
 		setIconifiable(true);
-		module.addToDesktopFrame(this);
+		if (mainFrame != null) {
+			mainFrame.add(this);
+		} else
+			module.addToDesktopFrame(this);
 		// module.getDesktopFrame().add(this);
 		toFront();
 	}

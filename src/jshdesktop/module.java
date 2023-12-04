@@ -33,7 +33,7 @@ import terra.shell.utils.system.GeneralVariable;
 import terra.shell.utils.system.Variables;
 
 public class module extends terra.shell.modules.Module {
-	private static volatile JDesktopFrame main;
+	private static JDesktopFrame main;
 	private static Configuration conf;
 	private final module thisMod = this;
 
@@ -51,7 +51,7 @@ public class module extends terra.shell.modules.Module {
 			return;
 		}
 		try {
-			SwingUtilities.invokeAndWait(new Runnable() {
+			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					main = new JDesktopFrame(thisMod);
 					main.init();
